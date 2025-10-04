@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOSS Account - MOSS Movies</title>
+    <link rel="stylesheet" href="css/design-system.css">
+    <link rel="stylesheet" href="css/account.css">
+</head>
+<body>
+    <nav class="top-nav">
+        <img src="media/website logo text.png" alt="MOSS Logo" class="header-logo">
+        <ul>
+            <li><a href="index.html" class="nav-link" title="Home">HOME</a></li>
+            <li><a href="watchwhat.html" class="nav-link" title="Watch What?">WATCH WHAT?</a></li>
+            <li><a href="community.html" class="nav-link" title="Community">COMMUNITY</a></li>
+            <li><a href="support.html" class="nav-link" title="Support">SUPPORT</a></li>
+            <li><a href="account.html" class="nav-link active" title="My Account">MY ACCOUNT</a></li>
+        </ul>
+        <div class="search-bar">
+            <label for="search" class="sr-only">Search in MOSS:</label>
+            <input type="text" id="search" class="search-input" placeholder="Search in MOSS">
+            <button type="submit" class="search-btn" title="Search">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <header class="header-background">
+    </header>
+
+    <main class="main-background">
+        <section class="account">
+            <div class="section-title">
+                <h1>My Account</h1>
+            </div>
+            <div class="account-grid">
+                <div class="account-feature">
+                    <h2>Sign in / Sign up</h2>
+                </div>
+                <div class="account-feature">
+                    <h2>Favorite watchlist</h2>
+                </div>
+                <div class="account-feature">
+                    <h2>My order</h2>
+                </div>
+                <div class="account-feature dropdown">
+                    <button class="dropdown-btn" aria-haspopup="true" aria-expanded="false" aria-controls="dropdown-content">
+                        Language switch <span class="arrow">&#9660;</span>
+                    </button>
+                    <div class="dropdown-content" id="dropdown-content">
+                        <a href="#" role="menuitem">English</a>
+                        <a href="#" role="menuitem">中文</a>
+                        <a href="#" role="menuitem">Español</a>
+                        <a href="#" role="menuitem">Français</a>
+                        <a href="#" role="menuitem">Deutsch</a>
+                        <a href="#" role="menuitem">Italiano</a>
+                        <a href="#" role="menuitem">日本語</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2024 MOSS - Movies One-stop Station</p>
+    </footer>
+
+    <script>
+        // Script to handle dropdown menu
+        document.addEventListener('DOMContentLoaded', function() {
+            var dropdownBtn = document.querySelector('.dropdown-btn');
+            var dropdownContent = document.querySelector('.dropdown-content');
+
+            dropdownBtn.addEventListener('click', function() {
+                var isExpanded = dropdownBtn.getAttribute('aria-expanded') === 'true';
+                dropdownBtn.setAttribute('aria-expanded', !isExpanded);
+                dropdownContent.classList.toggle('show');
+            });
+
+            window.addEventListener('click', function(event) {
+                if (!event.target.matches('.dropdown-btn')) {
+                    if (dropdownContent.classList.contains('show')) {
+                        dropdownContent.classList.remove('show');
+                        dropdownBtn.setAttribute('aria-expanded', 'false');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

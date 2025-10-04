@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOSS Movie Booking</title>
+    <link rel="stylesheet" href="css/design-system.css">
+    <link rel="stylesheet" href="css/stylebook.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <header class="header-background">
+        <div class="my-div">
+            <div class="logo">
+                <img src="media/website logo text.png" alt="MOSS Logo">
+            </div>
+            <div class="search-area">
+                <input type="text" id="search-movies" class="input" aria-label="Search Movies" placeholder="Search Movies">
+                <button type="submit" class="btn btn-primary" aria-label="Search">
+                    <i class="fas fa-search"></i>
+                </button>
+                <select name="state" id="state-select" aria-label="Select a State" onchange="showCities(this.value)">
+                    <option value="">Select a State</option>
+                    <option value="victoria">Victoria</option>
+                    <option value="nsw">New South Wales</option>
+                    <option value="queensland">Queensland</option>
+                </select>
+                <select name="city" id="city-select" aria-label="Select a City">
+                    <option value="">Select a City</option>
+                </select>
+            </div>
+        </div>
+        <h2 class="page-title" id="page-title">Book<br>now</h2>
+    </header>
+
+    <div class="filters">
+        <i class="fas fa-filter" aria-label="Filter"></i>
+        <span>Filter</span>
+        <div class="filter-container">
+            <button class="filter filter-cc" aria-label="Closed Captions"></button>
+            <span class="filter-description">CC</span>
+        </div>
+        <div class="filter-container">
+            <button class="filter filter-sub" aria-label="Subtitle Filter"></button>
+            <span class="filter-description">SUB</span>
+        </div>
+        <div class="filter-container">
+            <button class="filter filter-3d" aria-label="3D Filter"></button>
+            <span class="filter-description">3D</span>
+        </div>
+        <div class="filter-container">
+            <button class="filter filter-vm" aria-label="V-Max Filter"></button>
+            <span class="filter-description">V-Max</span>
+        </div>
+        <div class="filter-container">
+            <button class="filter filter-ad" aria-label="Audio Description Filter"></button>
+            <span class="filter-description">AD</span>
+        </div>
+    </div>
+
+    <main>
+        <div class="content">
+            <div class="movie-poster card card-cinema">
+                <img id="movie-poster-img" src="media/Kong Fu panda.webp" alt="Kung Fu Panda 4">
+                <p class="movie-title" id="movie-title">Kung Fu Panda 4</p>
+            </div>
+            <div class="movie-schedule">
+                <div class="date-selector">
+                    <button class="btn btn-secondary" aria-label="Select today's date" aria-pressed="true">Today 05/09 Thu</button>
+                    <button class="btn btn-dark" aria-label="Select tomorrow's date">Tomorrow 05/10 Fri</button>
+                    <button class="btn btn-dark" aria-label="Select date for 05/11 Sat">05/11 Sat</button>
+                    <button class="btn btn-dark next-date" aria-label="Go to next date">></button>
+                </div>
+                <div class="cinema-schedule">
+                    <h3>Cineplex Cinema</h3>
+                    <p>Location: 167 Grey St, South Brisbane QLD 4101</p>
+                    <ul aria-label="Show times and prices">
+                        <li>11:00 AM - $15</li>
+                        <li>12:30 PM - $15</li>
+                        <li>2:30 PM - $15</li>
+                    </ul>
+                    <button type="button" class="btn btn-primary booking-btn" aria-label="Book tickets for Cineplex Cinema">Book Tickets</button>
+                </div>
+                <div class="cinema-schedule">
+                    <h3>Event Cinemas Indooroopilly</h3>
+                    <p>Location: Indooroopilly Shopping Centre, 2/322 Moggill Rd, QLD 4068</p>
+                    <ul aria-label="Show times and prices">
+                        <li>10:00 AM - $16</li>
+                        <li>12:30 PM - $16</li>
+                        <li>3:30 PM - $16</li>
+                    </ul>
+                    <button type="button" class="btn btn-primary booking-btn" aria-label="Book tickets for Event Cinemas Indooroopilly">Book Tickets</button>
+                </div>
+                <div class="cinema-schedule">
+                    <h3>Palace Barracks Cinema</h3>
+                    <p>Location: 61 Petrie Terrace, Brisbane QLD 4000</p>
+                    <ul aria-label="Show times and prices">
+                        <li>9:00 AM - $14</li>
+                        <li>11:45 AM - $14</li>
+                        <li>2:00 PM - $14</li>
+                    </ul>
+                    <button type="button" class="btn btn-primary booking-btn" aria-label="Book tickets for Palace Barracks Cinema">Book Tickets</button>
+                </div>
+                <div class="cinema-schedule">
+                    <h3>Blue Room Cinebar</h3>
+                    <p>Location: 151 Baroona Rd, Paddington QLD 4064</p>
+                    <ul aria-label="Show times and prices">
+                        <li>10:00 AM - $17</li>
+                        <li>1:00 PM - $17</li>
+                        <li>4:00 PM - $17</li>
+                    </ul>
+                    <button type="button" class="btn btn-primary" aria-label="Book tickets for Blue Room Cinebar">Book Tickets</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="js/book.js"></script>
+</body>
+</html>

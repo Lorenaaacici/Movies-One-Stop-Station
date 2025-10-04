@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOSS Support - MOSS Movies</title>
+    <link rel="stylesheet" href="css/design-system.css">
+    <link rel="stylesheet" href="css/support.css">
+</head>
+<body>
+    <nav class="top-nav">
+        <img src="media/website logo text.png" alt="MOSS Logo" class="header-logo">
+        <ul>
+            <li><a href="index.html" class="nav-link" title="Home">HOME</a></li>
+            <li><a href="watchwhat.html" class="nav-link" title="Watch What?">WATCH WHAT?</a></li>
+            <li><a href="community.html" class="nav-link" title="Community">COMMUNITY</a></li>
+            <li><a href="support.html" class="nav-link active" title="Support">SUPPORT</a></li>
+            <li><a href="account.html" class="nav-link" title="My Account">MY ACCOUNT</a></li>
+        </ul>
+        <div class="search-bar">
+            <label for="search" class="sr-only">Search in MOSS:</label>
+            <input type="text" id="search" class="search-input" placeholder="Search in MOSS">
+            <button type="submit" class="search-btn" title="Search">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <header class="header-background">
+    </header>
+
+    <main>
+        <section class="support">
+            <div class="section-title">
+                <h1>Support</h1>
+            </div>
+            <div class="support-grid">
+                <div class="support-feature">
+                    <h2>FAQ</h2>
+                    <div class="faq-content">
+                        <h3>Q: What is MOSS?</h3>
+                        <p>A: MOSS stands for Movies One-stop Station, a platform that provides comprehensive movie information, including latest releases, reviews, and community discussions.</p>
+                        
+                        <h3>Q: How do I create an account?</h3>
+                        <p>A: To create an account, click on the 'MY ACCOUNT' link at the top of the page and follow the instructions to sign up. You will need a valid email address.</p>
+                        
+                        <h3>Q: How can I reset my password?</h3>
+                        <p>A: If you need to reset your password, click on 'MY ACCOUNT' and then select 'Forgot Password'. Follow the instructions to reset your password via email.</p>
+                        
+                        <h3>Q: How do I contact customer support?</h3>
+                        <p>A: You can contact our customer support team by clicking on the 'Contact us' link under the 'Support' section. Fill out the form and we will get back to you as soon as possible.</p>
+                    </div>
+                </div>
+                <div class="support-feature">
+                    <h2>About us</h2>
+                    <div class="about-content">
+                        <p>MOSS (Movies One-stop Station) is dedicated to providing movie enthusiasts with a comprehensive platform for all things movies. Our mission is to create a community where users can stay updated with the latest movie news, participate in discussions, read and write reviews, and connect with other movie lovers.</p>
+                        
+                        <p>Founded in 2023, MOSS aims to become the go-to destination for movie information and community engagement. We are constantly evolving and adding new features to enhance the user experience.</p>
+                        
+                        <p>Our team is passionate about movies and technology, working tirelessly to ensure that our platform meets the highest standards of quality and accessibility. We value feedback from our users and are committed to making MOSS a better place for everyone.</p>
+                        
+                        <p>Thank you for being a part of the MOSS community!</p>
+                    </div>
+                </div>
+                <div class="support-feature">
+                    <h2>Contact us</h2>
+                    <div class="contact-content">
+                        <p>If you have any questions, feedback, or need assistance, please feel free to contact us. Our customer support team is here to help you.</p>
+                        
+                        <form action="#" method="post">
+                            <label for="name">Name:</label><br>
+                            <input type="text" id="name" name="name" required><br>
+                            
+                            <label for="email">Email:</label><br>
+                            <input type="email" id="email" name="email" placeholder="example@domain.com" required><br>
+                            <label for="message">Message:</label><br>
+                            <textarea id="message" name="message" rows="4" required></textarea><br>
+                            
+                            <input type="submit" value="Submit">
+                        </form>
+                        
+                        <p>You can also reach us via email at <a href="mailto:support@moss.com">support@moss.com</a>.</p>
+                        
+                        <div class="social-media">
+                            <p>Follow us on social media for the latest updates:</p>
+                            <ul>
+                                <li><a href="https://www.facebook.com/moss" class="social-button" title="MOSS on Facebook">Facebook</a></li>
+                                <li><a href="https://www.twitter.com/moss" class="social-button" title="MOSS on Twitter">Twitter</a></li>
+                                <li><a href="https://www.instagram.com/moss" class="social-button" title="MOSS on Instagram">Instagram</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="support-feature dropdown">
+                    <button class="dropdown-btn" aria-haspopup="true" aria-expanded="false" aria-controls="dropdown-content">
+                        Accessibility option <span class="arrow">&#9660;</span>
+                    </button>                    
+                    <div class="dropdown-content" id="dropdown-content">
+                        <a href="#" role="menuitem">Audio description</a>
+                        <a href="#" role="menuitem">Text adjustment</a>
+                        <a href="#" role="menuitem">Contrast setting</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2024 MOSS - Movies One-stop Station</p>
+    </footer>
+
+    <script>
+        // Script to handle dropdown menu
+        document.addEventListener('DOMContentLoaded', function() {
+            var dropdownBtn = document.querySelector('.dropdown-btn');
+            var dropdownContent = document.querySelector('.dropdown-content');
+
+            dropdownBtn.addEventListener('click', function() {
+                var isExpanded = dropdownBtn.getAttribute('aria-expanded') === 'true';
+                dropdownBtn.setAttribute('aria-expanded', !isExpanded);
+                dropdownContent.classList.toggle('show');
+            });
+
+            window.addEventListener('click', function(event) {
+                if (!event.target.matches('.dropdown-btn')) {
+                    if (dropdownContent.classList.contains('show')) {
+                        dropdownContent.classList.remove('show');
+                        dropdownBtn.setAttribute('aria-expanded', 'false');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
