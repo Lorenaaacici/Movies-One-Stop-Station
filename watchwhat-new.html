@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watch What? - MOSS Advanced Movie Search</title>
+    <link rel="stylesheet" href="css/design-system.css">
+    <link rel="stylesheet" href="css/movie-cards.css">
+    <link rel="stylesheet" href="css/watchwhat-filters.css">
+</head>
+<body>
+    <nav class="top-nav">
+        <img src="media/website logo text.png" alt="MOSS Logo" class="header-logo">
+        <ul>
+            <li><a href="index.html" class="nav-link" title="Home">HOME</a></li>
+            <li><a href="watchwhat-new.html" class="nav-link" title="Watch What?">WATCH WHAT?</a></li>
+            <li><a href="book.html" class="nav-link" title="Book Tickets">BOOK</a></li>
+            <li><a href="support.html" class="nav-link" title="Support">SUPPORT</a></li>
+            <li><a href="account.html" class="nav-link" title="My Account">MY ACCOUNT</a></li>
+        </ul>
+        <div class="search-bar">
+            <label for="search" class="sr-only">Search in MOSS:</label>
+            <input type="text" id="search" class="search-input" placeholder="Search in MOSS">
+            <button type="submit" class="search-btn" title="Search">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <main class="watchwhat-page">
+        <!-- Page Header -->
+        <section class="page-header">
+            <h1>Discover Movies</h1>
+            <p>Filter and explore movies by genre, era, and rating</p>
+        </section>
+
+        <!-- Filter Panel -->
+        <section class="filter-section">
+            <div class="filter-container">
+                <!-- Genre Filter -->
+                <div class="filter-row">
+                    <label class="filter-label">Genre</label>
+                    <div class="filter-options" id="genre-options">
+                        <button class="filter-btn active" data-genre="">All</button>
+                        <button class="filter-btn" data-genre="28">Action</button>
+                        <button class="filter-btn" data-genre="12">Adventure</button>
+                        <button class="filter-btn" data-genre="16">Animation</button>
+                        <button class="filter-btn" data-genre="35">Comedy</button>
+                        <button class="filter-btn" data-genre="80">Crime</button>
+                        <button class="filter-btn" data-genre="18">Drama</button>
+                        <button class="filter-btn" data-genre="14">Fantasy</button>
+                        <button class="filter-btn" data-genre="27">Horror</button>
+                        <button class="filter-btn" data-genre="878">Sci-Fi</button>
+                        <button class="filter-btn" data-genre="53">Thriller</button>
+                        <button class="filter-btn" data-genre="10749">Romance</button>
+                    </div>
+                </div>
+
+                <!-- Year/Era Filter -->
+                <div class="filter-row">
+                    <label class="filter-label">Era</label>
+                    <div class="filter-options" id="era-options">
+                        <button class="filter-btn active" data-era="">All</button>
+                        <button class="filter-btn" data-era="2020-2025">2020s</button>
+                        <button class="filter-btn" data-era="2010-2019">2010s</button>
+                        <button class="filter-btn" data-era="2000-2009">2000s</button>
+                        <button class="filter-btn" data-era="1990-1999">1990s</button>
+                        <button class="filter-btn" data-era="1980-1989">1980s</button>
+                        <button class="filter-btn" data-era="1900-1979">Classic</button>
+                    </div>
+                </div>
+
+                <!-- Rating Filter -->
+                <div class="filter-row">
+                    <label class="filter-label">Rating</label>
+                    <div class="filter-options" id="rating-options">
+                        <button class="filter-btn active" data-rating="">All</button>
+                        <button class="filter-btn" data-rating="9">9.0+</button>
+                        <button class="filter-btn" data-rating="8">8.0+</button>
+                        <button class="filter-btn" data-rating="7">7.0+</button>
+                        <button class="filter-btn" data-rating="6">6.0+</button>
+                    </div>
+                </div>
+
+                <!-- Sort Options -->
+                <div class="filter-row">
+                    <label class="filter-label">Sort By</label>
+                    <div class="filter-options" id="sort-options">
+                        <button class="filter-btn active" data-sort="popularity.desc">Most Popular</button>
+                        <button class="filter-btn" data-sort="vote_average.desc">Highest Rated</button>
+                        <button class="filter-btn" data-sort="release_date.desc">Latest Release</button>
+                        <button class="filter-btn" data-sort="vote_count.desc">Most Reviewed</button>
+                    </div>
+                </div>
+
+                <div class="results-info">
+                    <p id="results-count">Loading movies...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Movie Results -->
+        <section class="results-section">
+            <div class="movie-list" id="movie-results">
+                <!-- Loading state -->
+                <div class="loading-state" id="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading movies...</p>
+                </div>
+            </div>
+
+            <div class="load-more-section">
+                <button id="load-more" class="btn btn-secondary" style="display: none;">
+                    Load More Movies
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2024 MOSS - Movies One-stop Station</p>
+    </footer>
+
+    <script src="js/favorites.js"></script>
+    <script src="js/watchwhat-filters.js"></script>
+</body>
+</html>

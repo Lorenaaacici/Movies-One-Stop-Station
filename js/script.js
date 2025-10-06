@@ -197,10 +197,6 @@ const MOSS = {
             const genres = movie.genre_ids ? movie.genre_ids.slice(0, 2).map(id => genreMap[id]).filter(Boolean) : ['Movie'];
             const genreDisplay = genres.map(genre => `<span class="genre-tag">${genre}</span>`).join('');
 
-            // Determine action button based on category
-            const actionButton = this.createActionButton(movie, category);
-
-
             movieCard.innerHTML = `
                 <div class="movie-poster-container">
                     <img src="${posterUrl}" alt="Poster of ${movie.title}" loading="lazy"
@@ -218,7 +214,10 @@ const MOSS = {
                         <span class="genre-tags">${genreDisplay}</span>
                     </div>
                     <div class="movie-actions">
-                        ${actionButton}
+                        <button class="btn btn-outline btn-sm movie-action-btn" onclick="MOSS.Movies.navigateToDetails('${movie.id}')">
+                            <span class="btn-icon">ℹ️</span> Details
+                        </button>
+                        ${this.createQuickBookingButton(movie)}
                     </div>
                 </div>
 
@@ -244,17 +243,34 @@ const MOSS = {
                             </div>` : ''}
                         </div>
                         <div class="movie-actions">
-                            <button class="btn btn-primary btn-sm" onclick="MOSS.Movies.playTrailer('${movie.title}', ${movie.id})">
-                                <i class="icon">▶</i> Watch Trailer
+                            <button class="btn btn-outline btn-sm favorite-btn ${window.FavoritesManager && FavoritesManager.isFavorite(movie.id) ? 'is-favorite' : ''}" onclick="MOSS.Movies.toggleFavorite(event, ${movie.id}, '${movie.title.replace(/'/g, "\\'")}', '${posterUrl}', ${movie.vote_average || 0}, '${movie.release_date || ''}', '${(movie.overview || '').replace(/'/g, "\\'")}'); return false;">
+                                <svg class="icon heart-icon" width="16" height="16" viewBox="0 0 24 24" fill="${window.FavoritesManager && FavoritesManager.isFavorite(movie.id) ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                </svg>
+                                <span class="fav-text">${window.FavoritesManager && FavoritesManager.isFavorite(movie.id) ? 'Saved' : 'Save'}</span>
                             </button>
-                            ${this.createOverlayActionButton(movie, category)}
-                            <button class="btn btn-outline btn-sm wishlist-btn" onclick="MOSS.Movies.addToWishlist(${movie.id})">
-                                <i class="icon">♡</i>
+                            <button class="btn btn-outline btn-sm" onclick="MOSS.Movies.viewDetails('${movie.title.replace(/'/g, "\\'")}', '${movie.id}')">
+                                <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                </svg>
+                                View Details
                             </button>
+                            ${this.createOverlayQuickBooking(movie)}
                         </div>
                     </div>
                 </div>
             `;
+
+            // Add click event to navigate to details page
+            movieCard.style.cursor = 'pointer';
+            movieCard.addEventListener('click', (e) => {
+                // Don't navigate if clicking on buttons
+                if (!e.target.closest('button')) {
+                    this.navigateToDetails(movie.id);
+                }
+            });
 
             // Add improved hover effects
             movieCard.addEventListener('mouseenter', this.showMovieOverlay);
@@ -263,41 +279,120 @@ const MOSS = {
             return movieCard;
         },
 
-        createActionButton(movie, category) {
-            switch(category) {
-                case 'now_playing':
-                    return `<button class="btn btn-primary movie-action-btn" onclick="MOSS.Movies.bookMovie('${movie.title}', '${movie.id}')">
-                        <span class="btn-icon">🎫</span> Book Now
-                    </button>`;
-                case 'upcoming':
-                    return `<button class="btn btn-secondary movie-action-btn" onclick="MOSS.Movies.preorderMovie('${movie.title}', '${movie.id}')">
-                        <span class="btn-icon">⏰</span> Pre-order
-                    </button>`;
-                case 'popular':
-                case 'top_rated':
-                default:
-                    return `<button class="btn btn-outline movie-action-btn" onclick="MOSS.Movies.viewDetails('${movie.title}', '${movie.id}')">
-                        <span class="btn-icon">ℹ️</span> View Details
-                    </button>`;
+        // Navigate to movie details page
+        navigateToDetails(movieId) {
+            window.location.href = `movie-details.html?id=${movieId}`;
+        },
+
+        // Toggle favorite status
+        toggleFavorite(event, movieId, title, posterPath, voteAverage, releaseDate, overview) {
+            event.stopPropagation(); // Prevent card click
+
+            const movie = {
+                id: movieId,
+                title: title,
+                poster_path: posterPath,
+                vote_average: voteAverage,
+                release_date: releaseDate,
+                overview: overview
+            };
+
+            const btn = event.currentTarget;
+            const icon = btn.querySelector('.heart-icon');
+            const text = btn.querySelector('.fav-text');
+
+            if (window.FavoritesManager.isFavorite(movieId)) {
+                // Remove from favorites
+                window.FavoritesManager.remove(movieId);
+                icon.setAttribute('fill', 'none');
+                text.textContent = 'Save';
+                btn.classList.remove('is-favorite');
+                console.log(`Removed from favorites: ${title}`);
+            } else {
+                // Add to favorites
+                window.FavoritesManager.add(movie);
+                icon.setAttribute('fill', 'currentColor');
+                text.textContent = 'Saved';
+                btn.classList.add('is-favorite');
+                console.log(`Added to favorites: ${title}`);
             }
         },
 
-        createOverlayActionButton(movie, category) {
-            switch(category) {
-                case 'now_playing':
-                    return `<button class="btn btn-secondary btn-sm" onclick="MOSS.Movies.bookMovie('${movie.title.replace(/'/g, "\\'")}', '${movie.id}')">
-                        <i class="icon">🎫</i> Book Tickets
-                    </button>`;
-                case 'upcoming':
-                    return `<button class="btn btn-secondary btn-sm" onclick="MOSS.Movies.preorderMovie('${movie.title.replace(/'/g, "\\'")}', '${movie.id}')">
-                        <i class="icon">⏰</i> Pre-order
-                    </button>`;
-                case 'popular':
-                case 'top_rated':
-                default:
-                    return `<button class="btn btn-outline btn-sm" onclick="MOSS.Movies.viewDetails('${movie.title.replace(/'/g, "\\'")}', '${movie.id}')">
-                        <i class="icon">ℹ️</i> More Info
-                    </button>`;
+        // Get movie booking status based on release date
+        getMovieBookingStatus(movie) {
+            if (!movie.release_date) return { canBook: false, label: 'View Details', type: 'released' };
+
+            const releaseDate = new Date(movie.release_date);
+            const today = new Date();
+            // Reset time to midnight for accurate day comparison
+            releaseDate.setHours(0, 0, 0, 0);
+            today.setHours(0, 0, 0, 0);
+            const daysDiff = Math.ceil((releaseDate - today) / (1000 * 60 * 60 * 24));
+
+            console.log(`📅 ${movie.title}: Release ${movie.release_date}, Days diff: ${daysDiff}`);
+
+            // Future movie (more than 30 days away)
+            if (daysDiff > 30) {
+                return { canBook: false, label: 'Coming Soon', type: 'upcoming' };
+            }
+            // Upcoming movie (0-30 days in future) - can pre-order
+            else if (daysDiff > 0) {
+                return { canBook: true, label: 'Pre-order', type: 'upcoming' };
+            }
+            // Now playing (released within last 90 days)
+            else if (daysDiff >= -90) {
+                return { canBook: true, label: 'Book Now', type: 'now_playing' };
+            }
+            // Old movie (released more than 90 days ago)
+            else {
+                return { canBook: false, label: 'View Details', type: 'released' };
+            }
+        },
+
+        // Create quick booking button (only shows if movie is bookable)
+        createQuickBookingButton(movie) {
+            const status = this.getMovieBookingStatus(movie);
+
+            if (!status.canBook) {
+                return ''; // No button for old/far-future movies
+            }
+
+            if (status.type === 'upcoming') {
+                return `<button class="btn btn-secondary btn-sm movie-action-btn" onclick="MOSS.Movies.preorderMovie('${movie.title}', '${movie.id}')">
+                    <span class="btn-icon">⏰</span> Pre-order
+                </button>`;
+            } else {
+                return `<button class="btn btn-primary btn-sm movie-action-btn" onclick="MOSS.Movies.bookMovie('${movie.title}', '${movie.id}')">
+                    <span class="btn-icon">🎫</span> Book Now
+                </button>`;
+            }
+        },
+
+        // Create overlay quick booking button (only shows if movie is bookable)
+        createOverlayQuickBooking(movie) {
+            const status = this.getMovieBookingStatus(movie);
+
+            if (!status.canBook) {
+                return ''; // No booking button for old/far-future movies
+            }
+
+            if (status.type === 'upcoming') {
+                return `<button class="btn btn-secondary btn-sm" onclick="MOSS.Movies.preorderMovie('${movie.title.replace(/'/g, "\\'")}', '${movie.id}')">
+                    <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M12 6v6l4 2"></path>
+                    </svg>
+                    Pre-order Tickets
+                </button>`;
+            } else {
+                return `<button class="btn btn-primary btn-sm" onclick="MOSS.Movies.bookMovie('${movie.title.replace(/'/g, "\\'")}', '${movie.id}')">
+                    <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="8" width="20" height="12" rx="2" ry="2"></rect>
+                        <line x1="6" y1="1" x2="6" y2="4"></line>
+                        <line x1="18" y1="1" x2="18" y2="4"></line>
+                    </svg>
+                    Book Tickets
+                </button>`;
             }
         },
 
@@ -366,9 +461,9 @@ const MOSS = {
             }
         },
 
-        viewDetails(movieId) {
-            // Redirect to watchwhat page with movie ID
-            window.location.href = `watchwhat.html?movie=${movieId}`;
+        viewDetails(movieTitle, movieId) {
+            // Redirect to movie details page
+            window.location.href = `movie-details.html?id=${movieId}`;
         },
 
         bookMovie(movieTitle, movieId) {
@@ -379,11 +474,6 @@ const MOSS = {
         preorderMovie(movieTitle, movieId) {
             // Redirect to booking page for upcoming movies (pre-order)
             window.location.href = `book.html?movie=${encodeURIComponent(movieTitle)}&id=${movieId}&type=preorder`;
-        },
-
-        viewDetails(movieTitle, movieId) {
-            // Redirect to watchwhat page for movie details
-            window.location.href = `watchwhat.html?movie=${encodeURIComponent(movieTitle)}&id=${movieId}`;
         },
 
         playTrailer(movieTitle, movieId) {

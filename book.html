@@ -3,38 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOSS Movie Booking</title>
+    <title>Book Tickets - MOSS</title>
     <link rel="stylesheet" href="css/design-system.css">
     <link rel="stylesheet" href="css/stylebook.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
+    <!-- Unified Navigation -->
+    <nav class="top-nav">
+        <img src="media/website logo text.png" alt="MOSS Logo" class="header-logo">
+        <ul>
+            <li><a href="index.html" class="nav-link" title="Home">HOME</a></li>
+            <li><a href="watchwhat-new.html" class="nav-link" title="Watch What?">WATCH WHAT</a></li>
+            <li><a href="book.html" class="nav-link active" title="Book Tickets">BOOK</a></li>
+            <li><a href="support.html" class="nav-link" title="Support">SUPPORT</a></li>
+            <li><a href="account.html" class="nav-link" title="My Account">MY ACCOUNT</a></li>
+        </ul>
+        <div class="search-bar">
+            <label for="search" class="sr-only">Search in MOSS:</label>
+            <input type="text" id="search" class="search-input" placeholder="Search in MOSS">
+            <button type="submit" class="search-btn" title="Search">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Page Header with Location Selection -->
     <header class="header-background">
-        <div class="my-div">
-            <div class="logo">
-                <img src="media/website logo text.png" alt="MOSS Logo">
-            </div>
-            <div class="search-area">
-                <input type="text" id="search-movies" class="input" aria-label="Search Movies" placeholder="Search Movies">
-                <button type="submit" class="btn btn-primary" aria-label="Search">
-                    <i class="fas fa-search"></i>
-                </button>
-                <select name="state" id="state-select" aria-label="Select a State" onchange="showCities(this.value)">
+        <div class="page-header-content">
+            <h1 class="page-title">Book Tickets</h1>
+            <div class="location-selector">
+                <select name="state" id="state-select" class="input" aria-label="Select a State" onchange="showCities(this.value)">
                     <option value="">Select a State</option>
                     <option value="victoria">Victoria</option>
                     <option value="nsw">New South Wales</option>
                     <option value="queensland">Queensland</option>
                 </select>
-                <select name="city" id="city-select" aria-label="Select a City">
+                <select name="city" id="city-select" class="input" aria-label="Select a City">
                     <option value="">Select a City</option>
                 </select>
             </div>
         </div>
-        <h2 class="page-title" id="page-title">Book<br>now</h2>
     </header>
 
     <div class="filters">
-        <i class="fas fa-filter" aria-label="Filter"></i>
+        <svg class="filter-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-label="Filter">
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+        </svg>
         <span>Filter</span>
         <div class="filter-container">
             <button class="filter filter-cc" aria-label="Closed Captions"></button>
@@ -114,6 +131,7 @@
             </div>
         </div>
     </main>
+    <script src="js/bookings.js"></script>
     <script src="js/book.js"></script>
 </body>
 </html>

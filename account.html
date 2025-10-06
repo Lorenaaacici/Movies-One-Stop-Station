@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOSS Account - MOSS Movies</title>
+    <title>My Account - MOSS Movies</title>
     <link rel="stylesheet" href="css/design-system.css">
+    <link rel="stylesheet" href="css/movie-cards.css">
     <link rel="stylesheet" href="css/account.css">
 </head>
 <body>
@@ -12,8 +13,8 @@
         <img src="media/website logo text.png" alt="MOSS Logo" class="header-logo">
         <ul>
             <li><a href="index.html" class="nav-link" title="Home">HOME</a></li>
-            <li><a href="watchwhat.html" class="nav-link" title="Watch What?">WATCH WHAT?</a></li>
-            <li><a href="community.html" class="nav-link" title="Community">COMMUNITY</a></li>
+            <li><a href="watchwhat-new.html" class="nav-link" title="Watch What?">WATCH WHAT?</a></li>
+            <li><a href="book.html" class="nav-link" title="Book Tickets">BOOK</a></li>
             <li><a href="support.html" class="nav-link" title="Support">SUPPORT</a></li>
             <li><a href="account.html" class="nav-link active" title="My Account">MY ACCOUNT</a></li>
         </ul>
@@ -29,37 +30,128 @@
         </div>
     </nav>
 
-    <header class="header-background">
-    </header>
-
-    <main class="main-background">
-        <section class="account">
-            <div class="section-title">
-                <h1>My Account</h1>
+    <main class="account-page">
+        <!-- Account Header -->
+        <section class="account-header">
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </div>
+                <div class="user-info">
+                    <h1 id="user-name">Guest User</h1>
+                    <p class="user-stats">
+                        <span id="favorites-count">0</span> favorites ·
+                        <span id="bookings-count">0</span> bookings
+                    </p>
+                </div>
             </div>
-            <div class="account-grid">
-                <div class="account-feature">
-                    <h2>Sign in / Sign up</h2>
+        </section>
+
+        <!-- Tab Navigation -->
+        <section class="account-tabs">
+            <div class="tabs-container">
+                <button class="tab-btn active" data-tab="favorites">
+                    <svg class="tab-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                    My Favorites
+                </button>
+                <button class="tab-btn" data-tab="bookings">
+                    <svg class="tab-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15.75 0v3.75H20L11.25 24v-11.25H6l8.75-12.75z"></path>
+                        <rect x="2" y="8" width="20" height="12" rx="2" ry="2"></rect>
+                    </svg>
+                    My Bookings
+                </button>
+                <button class="tab-btn" data-tab="notes">
+                    <svg class="tab-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    My Notes
+                </button>
+            </div>
+        </section>
+
+        <!-- Tab Content -->
+        <section class="account-content">
+            <!-- Favorites Tab -->
+            <div id="favorites-tab" class="tab-content active">
+                <div class="content-header">
+                    <h2>My Favorite Movies</h2>
+                    <button class="btn btn-outline btn-sm" onclick="AccountManager.clearAllFavorites()">Clear All</button>
                 </div>
-                <div class="account-feature">
-                    <h2>Favorite watchlist</h2>
+                <div id="favorites-grid" class="movie-list">
+                    <!-- Favorites will be loaded here -->
                 </div>
-                <div class="account-feature">
-                    <h2>My order</h2>
+                <div id="favorites-empty" class="empty-state" style="display: none;">
+                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 20px; opacity: 0.5;">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                    <p>No favorite movies yet</p>
+                    <p class="empty-hint">Start adding movies to your favorites from the homepage or Watch What page!</p>
                 </div>
-                <div class="account-feature dropdown">
-                    <button class="dropdown-btn" aria-haspopup="true" aria-expanded="false" aria-controls="dropdown-content">
-                        Language switch <span class="arrow">&#9660;</span>
-                    </button>
-                    <div class="dropdown-content" id="dropdown-content">
-                        <a href="#" role="menuitem">English</a>
-                        <a href="#" role="menuitem">中文</a>
-                        <a href="#" role="menuitem">Español</a>
-                        <a href="#" role="menuitem">Français</a>
-                        <a href="#" role="menuitem">Deutsch</a>
-                        <a href="#" role="menuitem">Italiano</a>
-                        <a href="#" role="menuitem">日本語</a>
+            </div>
+
+            <!-- Bookings Tab -->
+            <div id="bookings-tab" class="tab-content">
+                <div class="content-header">
+                    <h2>My Booking History</h2>
+                    <button class="btn btn-outline btn-sm" onclick="AccountManager.clearAllBookings()">Clear All</button>
+                </div>
+                <div id="bookings-list" class="bookings-container">
+                    <!-- Bookings will be loaded here -->
+                </div>
+                <div id="bookings-empty" class="empty-state" style="display: none;">
+                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 20px; opacity: 0.5;">
+                        <rect x="2" y="8" width="20" height="12" rx="2" ry="2"></rect>
+                        <line x1="6" y1="1" x2="6" y2="4"></line>
+                        <line x1="18" y1="1" x2="18" y2="4"></line>
+                    </svg>
+                    <p>No bookings yet</p>
+                    <p class="empty-hint">Book tickets for your favorite movies from the Book page!</p>
+                </div>
+            </div>
+
+            <!-- Notes Tab -->
+            <div id="notes-tab" class="tab-content">
+                <div class="content-header">
+                    <h2>Movie Notes & Reviews</h2>
+                </div>
+                <div class="notes-form">
+                    <h3>Add a Note</h3>
+                    <input type="text" id="note-movie-title" class="input" placeholder="Movie Title">
+                    <textarea id="note-content" class="textarea" rows="4" placeholder="Write your thoughts about this movie..."></textarea>
+                    <div class="rating-input">
+                        <label>Your Rating:</label>
+                        <div class="star-rating">
+                            <span class="star" data-rating="1">☆</span>
+                            <span class="star" data-rating="2">☆</span>
+                            <span class="star" data-rating="3">☆</span>
+                            <span class="star" data-rating="4">☆</span>
+                            <span class="star" data-rating="5">☆</span>
+                        </div>
                     </div>
+                    <button class="btn btn-primary" onclick="AccountManager.addNote()">Save Note</button>
+                </div>
+                <div id="notes-list" class="notes-container">
+                    <!-- Notes will be loaded here -->
+                </div>
+                <div id="notes-empty" class="empty-state" style="display: none;">
+                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 20px; opacity: 0.5;">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                    </svg>
+                    <p>No notes yet</p>
+                    <p class="empty-hint">Start writing your thoughts about movies you've watched!</p>
                 </div>
             </div>
         </section>
@@ -69,27 +161,8 @@
         <p>© 2024 MOSS - Movies One-stop Station</p>
     </footer>
 
-    <script>
-        // Script to handle dropdown menu
-        document.addEventListener('DOMContentLoaded', function() {
-            var dropdownBtn = document.querySelector('.dropdown-btn');
-            var dropdownContent = document.querySelector('.dropdown-content');
-
-            dropdownBtn.addEventListener('click', function() {
-                var isExpanded = dropdownBtn.getAttribute('aria-expanded') === 'true';
-                dropdownBtn.setAttribute('aria-expanded', !isExpanded);
-                dropdownContent.classList.toggle('show');
-            });
-
-            window.addEventListener('click', function(event) {
-                if (!event.target.matches('.dropdown-btn')) {
-                    if (dropdownContent.classList.contains('show')) {
-                        dropdownContent.classList.remove('show');
-                        dropdownBtn.setAttribute('aria-expanded', 'false');
-                    }
-                }
-            });
-        });
-    </script>
+    <script src="js/favorites.js"></script>
+    <script src="js/bookings.js"></script>
+    <script src="js/account.js"></script>
 </body>
 </html>

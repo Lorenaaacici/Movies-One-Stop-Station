@@ -2,80 +2,77 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
 }
 
 body, html {
     width: 100%;
-    height: 100%;
+    min-height: 100%;
+    background-color: var(--bg-primary);
 }
 
-header {
+/* Page Header with Background */
+.header-background {
     background-color: #000;
-    background-image: url('../media/book bg.avif'); /* Path to your image */
-    background-size: cover; /* Ensures the image covers the entire header area without being contained within its dimensions */
-    background-position: center; /* Centers the background image */
-    background-repeat: no-repeat; /* Prevents the image from repeating */
+    background-image: url('../media/book bg.avif');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     color: white;
-    padding: 20px;
+    padding: 100px 40px 60px;
+    margin-top: 60px;
+    width: 100%;
+    min-height: 300px;
     display: flex;
     align-items: center;
-    flex-direction: row; /* Change from column to row for horizontal alignment of elements */
-    justify-content: space-between;
-    width: 100%; /* Full width */
-    height: 287px; /* Specific height for the header */
-    position: fixed; /* Keeps the header at the top of the viewport */
-    top: 0;
-    left: 0;
-    z-index: 1000; /* Ensures the header stays above all other content */
-    box-sizing: border-box; /* Includes padding and border in the element's total width and height */
+    justify-content: center;
 }
 
-.logo {
-    align-self: flex-start; /* Align logo to the left */
-    position: relative; /* Adjust based on layout needs */
-    top: 5px; /* Adjusted for visual balance */
-    padding-bottom: 10px; /* Space between logo and search area */
-}
-
-.logo img {
-    top: 0;
-    margin-top: 0;
-    margin-bottom: 10px;
-    left: 0;
-    height: auto;
-    width: 230px; /* Adjust the logo size accordingly */
-    display: block; /* Ensure the logo image does not have extra space around it */
-}
-
-.search-area {
+.page-header-content {
+    max-width: 1400px;
+    width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    width: 100%; 
-    position: relative;
-    margin-left: auto; /* Push search area to the right */
-    margin-right: 20px;
-    padding-left: 5px; /* Alignment padding */
+    align-items: center;
+    gap: 30px;
 }
 
-.search-area input[type="text"] {
-    padding: 8px;
-    width: 100%; /* Take up full width of .search-area */
-    margin-top: 5px;
-    flex-grow: 1;
-    margin-right: 10px;
-    padding-right: 50px;
+.page-title {
+    font-size: 56px;
+    font-weight: 700;
+    color: var(--accent-gold);
+    text-align: center;
+    margin: 0;
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
 }
 
-.search-area select {
+.location-selector {
+    display: flex;
+    gap: 16px;
+    max-width: 600px;
     width: 100%;
-    padding: 8px;
-    margin-top: 15px;
-    background: #fff; /* Ensure visibility against dark background */
-    color: #000; /* Text color */
-    border: 1px solid #ccc; /* Subtle border for inputs */
-    position: relative;
+}
+
+.location-selector select {
+    flex: 1;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.95);
+    color: var(--bg-primary);
+    border: 2px solid var(--accent-gold);
+    border-radius: var(--radius-md);
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.location-selector select:hover {
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(252, 226, 147, 0.3);
+}
+
+.location-selector select:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(252, 226, 147, 0.3);
 }
 
 .search-area button {
@@ -151,19 +148,22 @@ header {
     display: flex;
     align-items: center;
     padding: 10px 20px;
-    background-color: #ffffff; /* White background for better visibility */
-    justify-content: flex-start; /* Align filters to the left */
-    width: 100%; /* Ensures the filter bar spans the full width */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Adds subtle shadow for depth */
-    position: fixed; /* Fixed position to stay visible */
-    top: 287px; /* Position right below the header */
-    left: 0;
-    z-index: 100; /* High z-index to keep it above other content but below the header */
+    background-color: #ffffff;
+    justify-content: flex-start;
+    width: 100%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    gap: 8px;
 }
 
-.fas.fa-filter {
-    color: #000; /* Change icon color */
-    font-size: 20px; /* Change icon size */
+.filter-icon {
+    color: #000;
+    margin-right: 8px;
+}
+
+.filters > span {
+    font-weight: 600;
+    color: #000;
+    margin-right: 12px;
 }
 
 .filter {
@@ -222,8 +222,8 @@ main {
     display: flex;
     padding: 20px;
     position: relative;
-    margin-top: 400px; /* Adjust based on header and filters height */
-    flex-wrap: wrap; /* Ensure content doesn't overflow */
+    margin-top: 0;
+    flex-wrap: wrap;
 }
 
 .content {
@@ -373,16 +373,14 @@ main {
 
     .filters {
         flex-direction: row;
-        flex-wrap: wrap; 
-        justify-content: center; 
+        flex-wrap: wrap;
+        justify-content: center;
         padding: 10px;
-        top: 150px;
-        margin-top: 65px;
     }
 
     .filter {
-        width: 40px; 
-        height: 40px; 
+        width: 40px;
+        height: 40px;
         margin: 5px;
     }
 
@@ -394,14 +392,14 @@ main {
     main {
         flex-direction: column;
         padding: 10px;
-        margin-top: 20px;
+        margin-top: 0;
     }
 
     .content {
         flex-direction: column;
         width: 100%;
         height: auto;
-        margin-top: 280px;
+        margin-top: 0;
     }
 
     .movie-poster, 
@@ -486,11 +484,11 @@ main {
 
     .filters {
         flex-direction: row;
-        flex-wrap: wrap; /* Allow wrapping */
-        justify-content: flex-start; /* Adjust alignment */
+        flex-wrap: wrap;
+        justify-content: flex-start;
         padding: 10px;
-        position: static; /* Static position */
-        margin-top: 205px; /* Adjust based on header height */
+        position: static;
+        margin-top: 0;
     }
 
     .filter {
