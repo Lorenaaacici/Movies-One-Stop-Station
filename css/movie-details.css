@@ -113,6 +113,8 @@
     background-position: center;
     background-repeat: no-repeat;
     margin-bottom: var(--space-8);
+    margin-top: -80px; /* Offset body padding for flush backdrop */
+    padding-top: 80px; /* Add space back for content positioning */
 }
 
 .movie-backdrop::after {
@@ -437,13 +439,49 @@
     background: var(--accent-gold);
 }
 
+/* Cast Scroll Container with Fade Effect */
+.cast-scroll-container {
+    position: relative;
+}
+
+/* Cast Grid - Horizontal Scrollable */
 .cast-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: var(--space-6);
+    display: flex;
+    gap: var(--space-4);
+    overflow-x: auto;
+    padding: var(--space-2) 0 var(--space-4);
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    /* Hide scrollbar but keep functionality */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+}
+
+.cast-grid::-webkit-scrollbar {
+    display: none; /* Chrome/Safari/Opera */
+}
+
+/* Right fade gradient to indicate more content */
+.cast-scroll-fade {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 60px;
+    background: linear-gradient(to right, transparent, var(--bg-primary));
+    pointer-events: none;
+    z-index: 1;
+    transition: opacity 0.3s ease;
+}
+
+/* Hide fade when scrolled to end */
+.cast-scroll-container.scrolled-end .cast-scroll-fade {
+    opacity: 0;
 }
 
 .cast-card {
+    flex-shrink: 0;
+    width: 130px;
     background: var(--bg-card);
     border-radius: var(--radius-lg);
     overflow: hidden;
@@ -484,11 +522,17 @@
     font-weight: 600;
     color: var(--text-primary);
     margin-bottom: var(--space-1);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .cast-character {
     font-size: var(--text-xs);
     color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* === Similar Movies Grid === */
@@ -520,6 +564,43 @@
     background: rgba(240, 228, 191, 0.1);
 }
 
+/* Skeleton placeholder for missing posters */
+.similar-movie-card .poster-skeleton {
+    width: 100%;
+    aspect-ratio: 2/3;
+    background: linear-gradient(
+        110deg,
+        rgba(50, 50, 50, 1) 8%,
+        rgba(70, 70, 70, 1) 18%,
+        rgba(50, 50, 50, 1) 33%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s ease-in-out infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.similar-movie-card .poster-skeleton::after {
+    content: '';
+    width: 48px;
+    height: 48px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='1.5'%3E%3Crect x='2' y='2' width='20' height='20' rx='2'/%3E%3Ccircle cx='8.5' cy='8.5' r='1.5'/%3E%3Cpath d='M21 15l-5-5L5 21'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.3;
+}
+
+@keyframes skeleton-shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
 .similar-movie-info {
     padding: var(--space-3);
 }
@@ -547,6 +628,8 @@
 
     .movie-backdrop {
         height: 300px;
+        margin-top: -56px; /* Mobile nav height offset */
+        padding-top: 56px;
     }
 
     .movie-poster-section {
@@ -567,8 +650,11 @@
     }
 
     .cast-grid {
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-        gap: var(--space-4);
+        gap: var(--space-3);
+    }
+
+    .cast-card {
+        width: 110px;
     }
 
     .similar-movies-grid {

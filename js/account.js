@@ -4,15 +4,94 @@
 
 const AccountManager = {
     NOTES_STORAGE_KEY: 'moss_notes',
+    // Fallback poster as data URI (no external file needed)
+    DEFAULT_POSTER: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='450' viewBox='0 0 300 450'%3E%3Crect fill='%231a1a1a' width='300' height='450'/%3E%3Crect fill='%232a2a2a' x='20' y='20' width='260' height='410' rx='8'/%3E%3Ctext x='150' y='200' text-anchor='middle' fill='%23666' font-family='Arial' font-size='48'%3E%F0%9F%8E%AC%3C/text%3E%3Ctext x='150' y='250' text-anchor='middle' fill='%23555' font-family='Arial' font-size='14'%3ENo Poster%3C/text%3E%3Ctext x='150' y='275' text-anchor='middle' fill='%23444' font-family='Arial' font-size='12'%3EAvailable%3C/text%3E%3C/svg%3E",
     selectedRating: 0,
+    modalResolve: null,
 
     init() {
         console.log('🎬 Initializing Account Manager...');
 
         this.setupTabs();
         this.setupStarRating();
+        this.setupModal();
         this.loadAllData();
         this.updateStats();
+    },
+
+    // Setup custom confirm modal
+    setupModal() {
+        const modal = document.getElementById('confirm-modal');
+        const cancelBtn = document.getElementById('confirm-cancel');
+        const confirmBtn = document.getElementById('confirm-ok');
+
+        cancelBtn.addEventListener('click', () => {
+            this.hideModal();
+            if (this.modalResolve) {
+                this.modalResolve(false);
+                this.modalResolve = null;
+            }
+        });
+
+        confirmBtn.addEventListener('click', () => {
+            this.hideModal();
+            if (this.modalResolve) {
+                this.modalResolve(true);
+                this.modalResolve = null;
+            }
+        });
+
+        // Close on overlay click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                this.hideModal();
+                if (this.modalResolve) {
+                    this.modalResolve(false);
+                    this.modalResolve = null;
+                }
+            }
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                this.hideModal();
+                if (this.modalResolve) {
+                    this.modalResolve(false);
+                    this.modalResolve = null;
+                }
+            }
+        });
+    },
+
+    // Show custom confirm modal
+    showConfirm(title, message, isDanger = false) {
+        return new Promise((resolve) => {
+            const modal = document.getElementById('confirm-modal');
+            const titleEl = document.getElementById('confirm-title');
+            const messageEl = document.getElementById('confirm-message');
+            const confirmBtn = document.getElementById('confirm-ok');
+            const iconEl = document.getElementById('modal-icon');
+
+            titleEl.textContent = title;
+            messageEl.textContent = message;
+
+            if (isDanger) {
+                confirmBtn.classList.add('danger');
+                iconEl.classList.add('danger');
+            } else {
+                confirmBtn.classList.remove('danger');
+                iconEl.classList.remove('danger');
+            }
+
+            this.modalResolve = resolve;
+            modal.classList.add('active');
+        });
+    },
+
+    hideModal() {
+        const modal = document.getElementById('confirm-modal');
+        modal.classList.remove('active');
     },
 
     // Setup tab switching
@@ -122,14 +201,14 @@ const AccountManager = {
 
         const posterUrl = movie.poster_path && movie.poster_path.startsWith('/')
             ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-            : movie.poster_path || 'media/default-poster.jpg';
+            : movie.poster_path || this.DEFAULT_POSTER;
 
         const rating = movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A';
         const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : '';
 
         card.innerHTML = `
             <div class="movie-poster-container">
-                <img src="${posterUrl}" alt="${movie.title}" onerror="this.src='media/default-poster.jpg'">
+                <img src="${posterUrl}" alt="${movie.title}" onerror="this.src=AccountManager.DEFAULT_POSTER">
                 <div class="movie-rating-overlay">
                     <span class="imdb-like-rating">★ ${rating}</span>
                 </div>
@@ -151,8 +230,13 @@ const AccountManager = {
     },
 
     // Remove favorite
-    removeFavorite(movieId) {
-        if (confirm('Remove this movie from favorites?')) {
+    async removeFavorite(movieId) {
+        const confirmed = await this.showConfirm(
+            'Remove from Favorites',
+            'Are you sure you want to remove this movie from your favorites?',
+            true
+        );
+        if (confirmed) {
             window.FavoritesManager.remove(movieId);
             this.loadFavorites();
             this.updateStats();
@@ -160,8 +244,13 @@ const AccountManager = {
     },
 
     // Clear all favorites
-    clearAllFavorites() {
-        if (confirm('Are you sure you want to clear all favorites?')) {
+    async clearAllFavorites() {
+        const confirmed = await this.showConfirm(
+            'Clear All Favorites',
+            'This will remove all movies from your favorites list. This action cannot be undone.',
+            true
+        );
+        if (confirmed) {
             window.FavoritesManager.clearAll();
             this.loadFavorites();
             this.updateStats();
@@ -193,44 +282,57 @@ const AccountManager = {
         });
     },
 
-    // Create booking card
+    // Create booking card - horizontal list item
     createBookingCard(booking) {
         const card = document.createElement('div');
         card.className = 'booking-card';
 
-        const bookedDate = new Date(booking.bookedAt).toLocaleDateString('en-US', {
+        // Format show date compactly
+        const showDate = booking.date ? new Date(booking.date).toLocaleDateString('en-US', {
             month: 'short',
-            day: 'numeric',
-            year: 'numeric'
-        });
+            day: 'numeric'
+        }) : 'N/A';
 
         card.innerHTML = `
             <div class="booking-poster">
-                <img src="${booking.moviePoster}" alt="${booking.movieTitle}" onerror="this.src='media/default-poster.jpg'">
+                <img src="${booking.moviePoster}" alt="${booking.movieTitle}" onerror="this.src=AccountManager.DEFAULT_POSTER">
             </div>
             <div class="booking-details">
-                <h3>${booking.movieTitle}</h3>
-                <div class="booking-info">
-                    <p><strong>Cinema:</strong> ${booking.cinema || 'Not specified'}</p>
-                    <p><strong>Date:</strong> ${booking.date}</p>
-                    <p><strong>Time:</strong> ${booking.time}</p>
-                    <p><strong>Seats:</strong> ${booking.seats}</p>
-                    <p><strong>Total:</strong> $${booking.totalPrice}</p>
-                    <p class="booking-date">Booked on: ${bookedDate}</p>
+                <div class="booking-title">
+                    <h3 title="${booking.movieTitle}">${booking.movieTitle}</h3>
+                    <div class="booking-id">#${booking.id.slice(-6)}</div>
                 </div>
-                <div class="booking-actions">
-                    <button class="btn btn-outline btn-sm" onclick="AccountManager.removeBooking('${booking.id}')">Cancel Booking</button>
+                <div class="booking-info">
+                    <div class="booking-info-item">
+                        <span class="label">Date</span>
+                        <span class="value">${showDate}</span>
+                    </div>
+                    <div class="booking-info-item">
+                        <span class="label">Time</span>
+                        <span class="value">${booking.time}</span>
+                    </div>
+                    <div class="booking-info-item total">
+                        <span class="label">Total</span>
+                        <span class="value">$${booking.totalPrice}</span>
+                    </div>
                 </div>
             </div>
-            <div class="booking-id">ID: ${booking.id}</div>
+            <div class="booking-actions">
+                <button class="btn btn-outline btn-sm" onclick="AccountManager.removeBooking('${booking.id}')">Cancel</button>
+            </div>
         `;
 
         return card;
     },
 
     // Remove booking
-    removeBooking(bookingId) {
-        if (confirm('Are you sure you want to cancel this booking?')) {
+    async removeBooking(bookingId) {
+        const confirmed = await this.showConfirm(
+            'Cancel Booking',
+            'Are you sure you want to cancel this booking? This action cannot be undone.',
+            true
+        );
+        if (confirmed) {
             window.BookingsManager.remove(bookingId);
             this.loadBookings();
             this.updateStats();
@@ -238,8 +340,13 @@ const AccountManager = {
     },
 
     // Clear all bookings
-    clearAllBookings() {
-        if (confirm('Are you sure you want to clear all bookings?')) {
+    async clearAllBookings() {
+        const confirmed = await this.showConfirm(
+            'Clear All Bookings',
+            'This will remove all your booking history. This action cannot be undone.',
+            true
+        );
+        if (confirmed) {
             window.BookingsManager.clearAll();
             this.loadBookings();
             this.updateStats();
@@ -330,8 +437,13 @@ const AccountManager = {
         return card;
     },
 
-    removeNote(noteId) {
-        if (confirm('Delete this note?')) {
+    async removeNote(noteId) {
+        const confirmed = await this.showConfirm(
+            'Delete Note',
+            'Are you sure you want to delete this note? This action cannot be undone.',
+            true
+        );
+        if (confirmed) {
             const notes = this.getNotes();
             const filtered = notes.filter(n => n.id !== noteId);
             localStorage.setItem(this.NOTES_STORAGE_KEY, JSON.stringify(filtered));

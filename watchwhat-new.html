@@ -10,17 +10,18 @@
 </head>
 <body>
     <nav class="top-nav">
-        <img src="media/website logo text.png" alt="MOSS Logo" class="header-logo">
-        <ul>
+        <img src="media/website logo text.png" alt="MOSS Logo" class="header-logo header-logo-full">
+        <img src="media/MOSS.png" alt="MOSS" class="header-logo header-logo-mobile">
+        <ul id="nav-menu">
             <li><a href="index.html" class="nav-link" title="Home">HOME</a></li>
-            <li><a href="watchwhat-new.html" class="nav-link" title="Watch What?">WATCH WHAT?</a></li>
+            <li><a href="watchwhat-new.html" class="nav-link active" title="Watch What?">WATCH WHAT?</a></li>
             <li><a href="book.html" class="nav-link" title="Book Tickets">BOOK</a></li>
             <li><a href="support.html" class="nav-link" title="Support">SUPPORT</a></li>
             <li><a href="account.html" class="nav-link" title="My Account">MY ACCOUNT</a></li>
         </ul>
         <div class="search-bar">
             <label for="search" class="sr-only">Search in MOSS:</label>
-            <input type="text" id="search" class="search-input" placeholder="Search in MOSS">
+            <input type="text" id="search" class="search-input" placeholder="Search movies...">
             <button type="submit" class="search-btn" title="Search">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="11" cy="11" r="8"></circle>
@@ -28,6 +29,11 @@
                 </svg>
             </button>
         </div>
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle navigation menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </nav>
 
     <main class="watchwhat-page">
@@ -124,7 +130,9 @@
         <p>© 2024 MOSS - Movies One-stop Station</p>
     </footer>
 
+    <script src="js/accessibility.js"></script>
     <script src="js/favorites.js"></script>
+    <script src="js/script.js"></script>
     <script src="js/watchwhat-filters.js"></script>
 </body>
 </html>

@@ -5,6 +5,8 @@ const MOSS = {
         BASE_URL: 'https://api.themoviedb.org/3',
         API_KEY: 'a07e22bc18f5cb106bfe4cc1f83ad8ed', // Demo TMDB API key
         IMAGE_BASE_URL: 'https://image.tmdb.org/t/p/w500',
+        // Fallback poster as data URI (no external file needed)
+        DEFAULT_POSTER: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='450' viewBox='0 0 300 450'%3E%3Crect fill='%231a1a1a' width='300' height='450'/%3E%3Crect fill='%232a2a2a' x='20' y='20' width='260' height='410' rx='8'/%3E%3Ctext x='150' y='200' text-anchor='middle' fill='%23666' font-family='Arial' font-size='48'%3E%F0%9F%8E%AC%3C/text%3E%3Ctext x='150' y='250' text-anchor='middle' fill='%23555' font-family='Arial' font-size='14'%3ENo Poster%3C/text%3E%3Ctext x='150' y='275' text-anchor='middle' fill='%23444' font-family='Arial' font-size='12'%3EAvailable%3C/text%3E%3C/svg%3E",
 
         // Fallback movie data for demo purposes
         FALLBACK_MOVIES: [
@@ -79,73 +81,88 @@ const MOSS = {
             }
         },
 
-        async fetchNowPlaying() {
+        async fetchNowPlaying(page = 1) {
             try {
-                console.log('🎭 Fetching now playing movies...');
-                const response = await fetch(`${MOSS.API.BASE_URL}/movie/now_playing?api_key=${MOSS.API.API_KEY}&language=en-US&page=1&region=US`);
+                console.log(`🎭 Fetching now playing movies (page ${page})...`);
+                const response = await fetch(`${MOSS.API.BASE_URL}/movie/now_playing?api_key=${MOSS.API.API_KEY}&language=en-US&page=${page}&region=US`);
 
                 if (response.ok) {
                     const data = await response.json();
-                    return data.results.slice(0, 12).map(movie => ({
-                        id: movie.id,
-                        title: movie.title,
-                        poster_path: movie.poster_path,
-                        vote_average: movie.vote_average,
-                        overview: movie.overview,
-                        release_date: movie.release_date,
-                        genre_ids: movie.genre_ids
-                    }));
+                    return {
+                        movies: data.results.map(movie => ({
+                            id: movie.id,
+                            title: movie.title,
+                            poster_path: movie.poster_path,
+                            vote_average: movie.vote_average,
+                            vote_count: movie.vote_count,
+                            overview: movie.overview,
+                            release_date: movie.release_date,
+                            genre_ids: movie.genre_ids
+                        })),
+                        totalPages: data.total_pages,
+                        currentPage: page
+                    };
                 }
             } catch (error) {
                 console.warn('Now playing fetch failed:', error.message);
             }
-            return [];
+            return { movies: [], totalPages: 1, currentPage: 1 };
         },
 
-        async fetchTopRated() {
+        async fetchTopRated(page = 1) {
             try {
-                console.log('⭐ Fetching top rated movies...');
-                const response = await fetch(`${MOSS.API.BASE_URL}/movie/top_rated?api_key=${MOSS.API.API_KEY}&language=en-US&page=1`);
+                console.log(`⭐ Fetching top rated movies (page ${page})...`);
+                const response = await fetch(`${MOSS.API.BASE_URL}/movie/top_rated?api_key=${MOSS.API.API_KEY}&language=en-US&page=${page}`);
 
                 if (response.ok) {
                     const data = await response.json();
-                    return data.results.slice(0, 12).map(movie => ({
-                        id: movie.id,
-                        title: movie.title,
-                        poster_path: movie.poster_path,
-                        vote_average: movie.vote_average,
-                        overview: movie.overview,
-                        release_date: movie.release_date,
-                        genre_ids: movie.genre_ids
-                    }));
+                    return {
+                        movies: data.results.map(movie => ({
+                            id: movie.id,
+                            title: movie.title,
+                            poster_path: movie.poster_path,
+                            vote_average: movie.vote_average,
+                            vote_count: movie.vote_count,
+                            overview: movie.overview,
+                            release_date: movie.release_date,
+                            genre_ids: movie.genre_ids
+                        })),
+                        totalPages: data.total_pages,
+                        currentPage: page
+                    };
                 }
             } catch (error) {
                 console.warn('Top rated fetch failed:', error.message);
             }
-            return [];
+            return { movies: [], totalPages: 1, currentPage: 1 };
         },
 
-        async fetchUpcoming() {
+        async fetchUpcoming(page = 1) {
             try {
-                console.log('🔮 Fetching upcoming movies...');
-                const response = await fetch(`${MOSS.API.BASE_URL}/movie/upcoming?api_key=${MOSS.API.API_KEY}&language=en-US&page=1`);
+                console.log(`🔮 Fetching upcoming movies (page ${page})...`);
+                const response = await fetch(`${MOSS.API.BASE_URL}/movie/upcoming?api_key=${MOSS.API.API_KEY}&language=en-US&page=${page}`);
 
                 if (response.ok) {
                     const data = await response.json();
-                    return data.results.slice(0, 12).map(movie => ({
-                        id: movie.id,
-                        title: movie.title,
-                        poster_path: movie.poster_path,
-                        vote_average: movie.vote_average,
-                        overview: movie.overview,
-                        release_date: movie.release_date,
-                        genre_ids: movie.genre_ids
-                    }));
+                    return {
+                        movies: data.results.map(movie => ({
+                            id: movie.id,
+                            title: movie.title,
+                            poster_path: movie.poster_path,
+                            vote_average: movie.vote_average,
+                            vote_count: movie.vote_count,
+                            overview: movie.overview,
+                            release_date: movie.release_date,
+                            genre_ids: movie.genre_ids
+                        })),
+                        totalPages: data.total_pages,
+                        currentPage: page
+                    };
                 }
             } catch (error) {
                 console.warn('Upcoming fetch failed:', error.message);
             }
-            return [];
+            return { movies: [], totalPages: 1, currentPage: 1 };
         },
 
         async fetchMoviesByCategory(category, page = 1) {
@@ -153,11 +170,11 @@ const MOSS = {
                 case 'popular':
                     return this.fetchPopularMovies(page);
                 case 'top_rated':
-                    return this.fetchTopRated();
+                    return this.fetchTopRated(page);
                 case 'now_playing':
-                    return this.fetchNowPlaying();
+                    return this.fetchNowPlaying(page);
                 case 'upcoming':
-                    return this.fetchUpcoming();
+                    return this.fetchUpcoming(page);
                 default:
                     return this.fetchPopularMovies(page);
             }
@@ -172,7 +189,7 @@ const MOSS = {
             // Determine poster URL - handle both API and local images
             const posterUrl = movie.poster_path && movie.poster_path.startsWith('/')
                 ? `${MOSS.API.IMAGE_BASE_URL}${movie.poster_path}`
-                : movie.poster_path || 'media/default-poster.jpg';
+                : movie.poster_path || MOSS.API.DEFAULT_POSTER;
 
             // Create rating with more realistic display
             const ratingText = movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A';
@@ -197,10 +214,17 @@ const MOSS = {
             const genres = movie.genre_ids ? movie.genre_ids.slice(0, 2).map(id => genreMap[id]).filter(Boolean) : ['Movie'];
             const genreDisplay = genres.map(genre => `<span class="genre-tag">${genre}</span>`).join('');
 
+            // Determine if we have a valid poster
+            const hasPoster = movie.poster_path && movie.poster_path !== MOSS.API.DEFAULT_POSTER;
+
             movieCard.innerHTML = `
                 <div class="movie-poster-container">
-                    <img src="${posterUrl}" alt="Poster of ${movie.title}" loading="lazy"
-                         onerror="this.src='media/default-poster.jpg'">
+                    ${hasPoster
+                        ? `<img src="${posterUrl}" alt="Poster of ${movie.title}" loading="lazy"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                           <div class="poster-skeleton" style="display:none;"></div>`
+                        : `<div class="poster-skeleton"></div>`
+                    }
                     <div class="movie-rating-overlay">
                         <span class="imdb-like-rating">★ ${ratingText}</span>
                     </div>
@@ -666,14 +690,171 @@ const MOSS = {
 
     // Search functionality
     Search: {
+        searchTimeout: null,
+        minChars: 2,
+
+        async searchMovies(query) {
+            if (!query || query.length < this.minChars) {
+                return [];
+            }
+
+            try {
+                console.log(`Searching for: ${query}`);
+                const response = await fetch(
+                    `${MOSS.API.BASE_URL}/search/movie?api_key=${MOSS.API.API_KEY}&language=en-US&query=${encodeURIComponent(query)}&page=1&include_adult=false`
+                );
+
+                if (response.ok) {
+                    const data = await response.json();
+                    return data.results.slice(0, 8); // Limit to 8 results
+                }
+            } catch (error) {
+                console.error('Search error:', error);
+            }
+            return [];
+        },
+
         handleSearch(searchTerm) {
             if (!searchTerm.trim()) {
-                alert('Please enter a search term');
                 return;
             }
 
-            // Redirect to watchwhat page with search term
-            window.location.href = `watchwhat.html?search=${encodeURIComponent(searchTerm)}`;
+            // Redirect to watchwhat-new page with search term
+            window.location.href = `watchwhat-new.html?search=${encodeURIComponent(searchTerm)}`;
+        },
+
+        setupSearchDropdown() {
+            const searchInput = document.querySelector('.search-input');
+            const searchBar = document.querySelector('.search-bar');
+
+            if (!searchInput || !searchBar) return;
+
+            // Create dropdown container
+            let dropdown = document.querySelector('.search-dropdown');
+            if (!dropdown) {
+                dropdown = document.createElement('div');
+                dropdown.className = 'search-dropdown';
+                searchBar.appendChild(dropdown);
+            }
+
+            // Handle input changes
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.trim();
+
+                // Clear previous timeout
+                if (this.searchTimeout) {
+                    clearTimeout(this.searchTimeout);
+                }
+
+                // Hide dropdown if query is too short
+                if (query.length < this.minChars) {
+                    this.hideDropdown();
+                    return;
+                }
+
+                // Debounce search
+                this.searchTimeout = setTimeout(async () => {
+                    const results = await this.searchMovies(query);
+                    this.showDropdown(results, query);
+                }, 300);
+            });
+
+            // Handle focus
+            searchInput.addEventListener('focus', async () => {
+                const query = searchInput.value.trim();
+                if (query.length >= this.minChars) {
+                    const results = await this.searchMovies(query);
+                    this.showDropdown(results, query);
+                }
+            });
+
+            // Handle click outside
+            document.addEventListener('click', (e) => {
+                if (!searchBar.contains(e.target)) {
+                    this.hideDropdown();
+                }
+            });
+
+            // Handle escape key
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    this.hideDropdown();
+                    searchInput.blur();
+                }
+            });
+        },
+
+        showDropdown(results, query) {
+            const dropdown = document.querySelector('.search-dropdown');
+            if (!dropdown) return;
+
+            if (results.length === 0) {
+                dropdown.innerHTML = `
+                    <div class="search-no-results">
+                        <p>No movies found for "${query}"</p>
+                    </div>
+                `;
+                dropdown.classList.add('active');
+                return;
+            }
+
+            // Genre mapping for search results
+            const genreMap = {
+                28: 'Action', 35: 'Comedy', 18: 'Drama', 27: 'Horror',
+                878: 'Sci-Fi', 53: 'Thriller', 10749: 'Romance', 16: 'Animation',
+                12: 'Adventure', 14: 'Fantasy', 80: 'Crime', 9648: 'Mystery',
+                10751: 'Family', 36: 'History', 10402: 'Music', 10752: 'War',
+                37: 'Western', 99: 'Documentary', 10770: 'TV Movie'
+            };
+
+            dropdown.innerHTML = results.map(movie => {
+                const posterUrl = movie.poster_path
+                    ? `${MOSS.API.IMAGE_BASE_URL}${movie.poster_path}`
+                    : MOSS.API.DEFAULT_POSTER;
+                const year = movie.release_date ? movie.release_date.substring(0, 4) : '';
+                const rating = movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A';
+
+                // Get genres
+                const genres = movie.genre_ids
+                    ? movie.genre_ids.slice(0, 3).map(id => genreMap[id]).filter(Boolean).join(' · ')
+                    : '';
+
+                // Get truncated overview
+                const overview = movie.overview
+                    ? (movie.overview.length > 100 ? movie.overview.substring(0, 100) + '...' : movie.overview)
+                    : '';
+
+                return `
+                    <a href="movie-details.html?id=${movie.id}" class="search-result-item">
+                        <img src="${posterUrl}" alt="${movie.title}" class="search-result-poster" onerror="this.src=MOSS.API.DEFAULT_POSTER">
+                        <div class="search-result-info">
+                            <span class="search-result-title">${movie.title}</span>
+                            <span class="search-result-meta">
+                                ${year ? `<span class="search-result-year">${year}</span>` : ''}
+                                <span class="search-result-rating">★ ${rating}</span>
+                            </span>
+                            ${genres ? `<span class="search-result-genres">${genres}</span>` : ''}
+                            ${overview ? `<span class="search-result-overview">${overview}</span>` : ''}
+                        </div>
+                    </a>
+                `;
+            }).join('');
+
+            // Add "View all results" link
+            dropdown.innerHTML += `
+                <a href="watchwhat-new.html?search=${encodeURIComponent(query)}" class="search-view-all">
+                    View all results for "${query}"
+                </a>
+            `;
+
+            dropdown.classList.add('active');
+        },
+
+        hideDropdown() {
+            const dropdown = document.querySelector('.search-dropdown');
+            if (dropdown) {
+                dropdown.classList.remove('active');
+            }
         }
     },
 
@@ -704,6 +885,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize navigation
     MOSS.Navigation.init();
+
+    // Initialize search dropdown
+    MOSS.Search.setupSearchDropdown();
 
     // Load movies on homepage
     if (document.getElementById('movie-grid')) {

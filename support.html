@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOSS Support - MOSS Movies</title>
+    <meta name="description" content="MOSS Support - Get help, FAQs, and contact our team">
+    <title>Support - MOSS Movies One-stop Station</title>
     <link rel="stylesheet" href="css/design-system.css">
     <link rel="stylesheet" href="css/support.css">
 </head>
 <body>
     <nav class="top-nav">
-        <img src="media/website logo text.png" alt="MOSS Logo" class="header-logo">
-        <ul>
+        <img src="media/website logo text.png" alt="MOSS Logo" class="header-logo header-logo-full">
+        <img src="media/MOSS.png" alt="MOSS" class="header-logo header-logo-mobile">
+        <ul id="nav-menu">
             <li><a href="index.html" class="nav-link" title="Home">HOME</a></li>
             <li><a href="watchwhat-new.html" class="nav-link" title="Watch What?">WATCH WHAT?</a></li>
             <li><a href="book.html" class="nav-link" title="Book Tickets">BOOK</a></li>
@@ -19,7 +21,7 @@
         </ul>
         <div class="search-bar">
             <label for="search" class="sr-only">Search in MOSS:</label>
-            <input type="text" id="search" class="search-input" placeholder="Search in MOSS">
+            <input type="text" id="search" class="search-input" placeholder="Search movies...">
             <button type="submit" class="search-btn" title="Search">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="11" cy="11" r="8"></circle>
@@ -27,84 +29,253 @@
                 </svg>
             </button>
         </div>
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle navigation menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </nav>
 
-    <header class="header-background">
+    <header class="support-hero">
+        <div class="hero-content">
+            <h1>How Can We Help?</h1>
+            <p>Find answers to common questions or get in touch with our team</p>
+        </div>
     </header>
 
-    <main>
-        <section class="support">
-            <div class="section-title">
-                <h1>Support</h1>
+    <main class="support-main">
+        <!-- FAQ Section -->
+        <section class="support-section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h2>Frequently Asked Questions</h2>
             </div>
-            <div class="support-grid">
-                <div class="support-feature">
-                    <h2>FAQ</h2>
-                    <div class="faq-content">
-                        <h3>Q: What is MOSS?</h3>
-                        <p>A: MOSS stands for Movies One-stop Station, a platform that provides comprehensive movie information, including latest releases, reviews, and community discussions.</p>
-                        
-                        <h3>Q: How do I create an account?</h3>
-                        <p>A: To create an account, click on the 'MY ACCOUNT' link at the top of the page and follow the instructions to sign up. You will need a valid email address.</p>
-                        
-                        <h3>Q: How can I reset my password?</h3>
-                        <p>A: If you need to reset your password, click on 'MY ACCOUNT' and then select 'Forgot Password'. Follow the instructions to reset your password via email.</p>
-                        
-                        <h3>Q: How do I contact customer support?</h3>
-                        <p>A: You can contact our customer support team by clicking on the 'Contact us' link under the 'Support' section. Fill out the form and we will get back to you as soon as possible.</p>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>What is MOSS?</span>
+                        <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p>MOSS stands for Movies One-stop Station, a platform that provides comprehensive movie information, including latest releases, reviews, and community discussions. Browse movies, book tickets, and keep track of your favorites all in one place.</p>
                     </div>
                 </div>
-                <div class="support-feature">
-                    <h2>About us</h2>
-                    <div class="about-content">
-                        <p>MOSS (Movies One-stop Station) is dedicated to providing movie enthusiasts with a comprehensive platform for all things movies. Our mission is to create a community where users can stay updated with the latest movie news, participate in discussions, read and write reviews, and connect with other movie lovers.</p>
-                        
-                        <p>Founded in 2023, MOSS aims to become the go-to destination for movie information and community engagement. We are constantly evolving and adding new features to enhance the user experience.</p>
-                        
-                        <p>Our team is passionate about movies and technology, working tirelessly to ensure that our platform meets the highest standards of quality and accessibility. We value feedback from our users and are committed to making MOSS a better place for everyone.</p>
-                        
-                        <p>Thank you for being a part of the MOSS community!</p>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>How do I book movie tickets?</span>
+                        <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p>To book tickets, navigate to the movie you want to watch and click the "Book Tickets" button. Select your preferred cinema location, date, time, and seats. Your booking will be saved to your account for easy access.</p>
                     </div>
                 </div>
-                <div class="support-feature">
-                    <h2>Contact us</h2>
-                    <div class="contact-content">
-                        <p>If you have any questions, feedback, or need assistance, please feel free to contact us. Our customer support team is here to help you.</p>
-                        
-                        <form action="#" method="post">
-                            <label for="name">Name:</label><br>
-                            <input type="text" id="name" name="name" required><br>
-                            
-                            <label for="email">Email:</label><br>
-                            <input type="email" id="email" name="email" placeholder="example@domain.com" required><br>
-                            <label for="message">Message:</label><br>
-                            <textarea id="message" name="message" rows="4" required></textarea><br>
-                            
-                            <input type="submit" value="Submit">
-                        </form>
-                        
-                        <p>You can also reach us via email at <a href="mailto:support@moss.com">support@moss.com</a>.</p>
-                        
-                        <div class="social-media">
-                            <p>Follow us on social media for the latest updates:</p>
-                            <ul>
-                                <li><a href="https://www.facebook.com/moss" class="social-button" title="MOSS on Facebook">Facebook</a></li>
-                                <li><a href="https://www.twitter.com/moss" class="social-button" title="MOSS on Twitter">Twitter</a></li>
-                                <li><a href="https://www.instagram.com/moss" class="social-button" title="MOSS on Instagram">Instagram</a></li>
-                            </ul>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>How do I save movies to my favorites?</span>
+                        <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Click the heart icon on any movie card or the "Add to Wishlist" button on the movie details page. Your favorites are saved locally and can be accessed anytime from the My Account page.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>Can I write personal notes about movies?</span>
+                        <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Yes! On any movie details page, you'll find a "My Notes" section where you can write your thoughts, rate the movie with stars, and save personal notes. You can also manage all your notes from the My Account page.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>How do I cancel a booking?</span>
+                        <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Go to My Account and navigate to the Bookings tab. Find the booking you wish to cancel and click the "Cancel Booking" button. Please note that cancellations are subject to our refund policy.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="support-section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h2>About MOSS</h2>
+            </div>
+            <div class="about-content">
+                <div class="about-card">
+                    <h3>Our Mission</h3>
+                    <p>MOSS (Movies One-stop Station) is dedicated to providing movie enthusiasts with a comprehensive platform for all things movies. We create a community where users can stay updated with the latest movie news, discover new films, and connect with other movie lovers.</p>
+                </div>
+                <div class="about-card">
+                    <h3>Our Story</h3>
+                    <p>Founded in 2023, MOSS aims to become the go-to destination for movie information and community engagement. We are constantly evolving and adding new features to enhance the user experience.</p>
+                </div>
+                <div class="about-card">
+                    <h3>Our Team</h3>
+                    <p>Our team is passionate about movies and technology, working tirelessly to ensure that our platform meets the highest standards of quality and accessibility. We value feedback from our users and are committed to making MOSS better for everyone.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="support-section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h2>Contact Us</h2>
+            </div>
+            <div class="contact-grid">
+                <div class="contact-form-container">
+                    <p class="contact-intro">Have a question or feedback? We'd love to hear from you.</p>
+                    <form id="contact-form" class="contact-form">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" placeholder="Your name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="your@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <div class="custom-dropdown" id="subject-dropdown">
+                                <input type="hidden" id="subject" name="subject" required>
+                                <button type="button" class="dropdown-trigger" aria-haspopup="listbox" aria-expanded="false">
+                                    <span class="dropdown-value">Select a topic</span>
+                                    <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
+                                <ul class="dropdown-menu" role="listbox">
+                                    <li class="dropdown-item" data-value="general" role="option">General Inquiry</li>
+                                    <li class="dropdown-item" data-value="booking" role="option">Booking Issue</li>
+                                    <li class="dropdown-item" data-value="technical" role="option">Technical Support</li>
+                                    <li class="dropdown-item" data-value="feedback" role="option">Feedback</li>
+                                    <li class="dropdown-item" data-value="other" role="option">Other</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" rows="5" placeholder="How can we help you?" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Send Message</button>
+                    </form>
+                </div>
+                <div class="contact-info">
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="info-text">
+                            <h4>Email Us</h4>
+                            <a href="mailto:support@moss.com">support@moss.com</a>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="info-text">
+                            <h4>Response Time</h4>
+                            <p>Within 24-48 hours</p>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <h4>Follow Us</h4>
+                        <div class="social-buttons">
+                            <button class="social-btn" title="Facebook" type="button">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                                </svg>
+                            </button>
+                            <button class="social-btn" title="Twitter" type="button">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                                </svg>
+                            </button>
+                            <button class="social-btn" title="Instagram" type="button">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                                </svg>
+                            </button>
+                            <button class="social-btn" title="YouTube" type="button">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 </div>
-                <div class="support-feature dropdown">
-                    <button class="dropdown-btn" aria-haspopup="true" aria-expanded="false" aria-controls="dropdown-content">
-                        Accessibility option <span class="arrow">&#9660;</span>
-                    </button>                    
-                    <div class="dropdown-content" id="dropdown-content">
-                        <a href="#" role="menuitem">Audio description</a>
-                        <a href="#" role="menuitem">Text adjustment</a>
-                        <a href="#" role="menuitem">Contrast setting</a>
-                    </div>
+            </div>
+        </section>
+
+        <!-- Accessibility Section -->
+        <section class="support-section accessibility-section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
                 </div>
+                <h2>Accessibility</h2>
+            </div>
+            <p class="accessibility-intro">We're committed to making MOSS accessible to everyone. Click to toggle these accessibility features:</p>
+            <div class="accessibility-grid">
+                <button class="accessibility-option" data-option="text" id="text-option">
+                    <div class="option-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M4 7V4h16v3M9 20h6M12 4v16" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="option-content">
+                        <span class="option-title">Larger Text</span>
+                        <span class="option-desc">Increase font size for better readability</span>
+                    </div>
+                </button>
+                <button class="accessibility-option" data-option="contrast" id="contrast-option">
+                    <div class="option-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="9" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 3v18" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 3a9 9 0 010 18" fill="currentColor" opacity="0.3"/>
+                        </svg>
+                    </div>
+                    <div class="option-content">
+                        <span class="option-title">High Contrast</span>
+                        <span class="option-desc">Enhance color contrast for visibility</span>
+                    </div>
+                </button>
             </div>
         </section>
     </main>
@@ -113,27 +284,14 @@
         <p>© 2024 MOSS - Movies One-stop Station</p>
     </footer>
 
-    <script>
-        // Script to handle dropdown menu
-        document.addEventListener('DOMContentLoaded', function() {
-            var dropdownBtn = document.querySelector('.dropdown-btn');
-            var dropdownContent = document.querySelector('.dropdown-content');
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <span class="toast-message"></span>
+    </div>
 
-            dropdownBtn.addEventListener('click', function() {
-                var isExpanded = dropdownBtn.getAttribute('aria-expanded') === 'true';
-                dropdownBtn.setAttribute('aria-expanded', !isExpanded);
-                dropdownContent.classList.toggle('show');
-            });
-
-            window.addEventListener('click', function(event) {
-                if (!event.target.matches('.dropdown-btn')) {
-                    if (dropdownContent.classList.contains('show')) {
-                        dropdownContent.classList.remove('show');
-                        dropdownBtn.setAttribute('aria-expanded', 'false');
-                    }
-                }
-            });
-        });
-    </script>
+    <script src="js/accessibility.js"></script>
+    <script src="js/favorites.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/support.js"></script>
 </body>
 </html>

@@ -7,11 +7,12 @@
     <link rel="stylesheet" href="css/design-system.css">
     <link rel="stylesheet" href="css/stylebook.css">
 </head>
-<body>
+<body class="book-page">
     <!-- Unified Navigation -->
     <nav class="top-nav">
-        <img src="media/website logo text.png" alt="MOSS Logo" class="header-logo">
-        <ul>
+        <img src="media/website logo text.png" alt="MOSS Logo" class="header-logo header-logo-full">
+        <img src="media/MOSS.png" alt="MOSS" class="header-logo header-logo-mobile">
+        <ul id="nav-menu">
             <li><a href="index.html" class="nav-link" title="Home">HOME</a></li>
             <li><a href="watchwhat-new.html" class="nav-link" title="Watch What?">WATCH WHAT</a></li>
             <li><a href="book.html" class="nav-link active" title="Book Tickets">BOOK</a></li>
@@ -28,109 +29,320 @@
                 </svg>
             </button>
         </div>
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle navigation menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </nav>
 
-    <!-- Page Header with Location Selection -->
-    <header class="header-background">
-        <div class="page-header-content">
-            <h1 class="page-title">Book Tickets</h1>
-            <div class="location-selector">
-                <select name="state" id="state-select" class="input" aria-label="Select a State" onchange="showCities(this.value)">
-                    <option value="">Select a State</option>
-                    <option value="victoria">Victoria</option>
-                    <option value="nsw">New South Wales</option>
-                    <option value="queensland">Queensland</option>
-                </select>
-                <select name="city" id="city-select" class="input" aria-label="Select a City">
-                    <option value="">Select a City</option>
-                </select>
+    <main class="book-main">
+        <!-- Pre-selected Movie Banner (shown when coming from homepage) -->
+        <section class="selected-movie-banner" id="selected-movie-banner" style="display: none;">
+            <div class="banner-content">
+                <img id="banner-poster" src="" alt="Movie poster">
+                <div class="banner-info">
+                    <span class="banner-label">Booking tickets for</span>
+                    <h2 id="banner-title">Movie Title</h2>
+                    <p id="banner-meta">2024 • Action, Adventure</p>
+                </div>
+                <button class="banner-change" onclick="BookingManager.clearSelectedMovie()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12"/>
+                    </svg>
+                    Change Movie
+                </button>
             </div>
-        </div>
-    </header>
+        </section>
 
-    <div class="filters">
-        <svg class="filter-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-label="Filter">
-            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
-        </svg>
-        <span>Filter</span>
-        <div class="filter-container">
-            <button class="filter filter-cc" aria-label="Closed Captions"></button>
-            <span class="filter-description">CC</span>
-        </div>
-        <div class="filter-container">
-            <button class="filter filter-sub" aria-label="Subtitle Filter"></button>
-            <span class="filter-description">SUB</span>
-        </div>
-        <div class="filter-container">
-            <button class="filter filter-3d" aria-label="3D Filter"></button>
-            <span class="filter-description">3D</span>
-        </div>
-        <div class="filter-container">
-            <button class="filter filter-vm" aria-label="V-Max Filter"></button>
-            <span class="filter-description">V-Max</span>
-        </div>
-        <div class="filter-container">
-            <button class="filter filter-ad" aria-label="Audio Description Filter"></button>
-            <span class="filter-description">AD</span>
+        <!-- Accessibility Filters -->
+        <section class="filters-bar" id="filters-bar">
+            <span class="filters-label">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/>
+                </svg>
+                Session Types
+            </span>
+            <div class="filter-options">
+                <button class="filter-chip" data-filter="cc" title="Closed Captions">
+                    <img src="media/cc icon.png" alt="CC" class="filter-icon">
+                    <span>Closed Captions</span>
+                </button>
+                <button class="filter-chip" data-filter="ad" title="Audio Description">
+                    <img src="media/AD icon.png" alt="AD" class="filter-icon">
+                    <span>Audio Description</span>
+                </button>
+                <button class="filter-chip" data-filter="3d" title="3D">
+                    <img src="media/3D icon.png" alt="3D" class="filter-icon">
+                    <span>3D</span>
+                </button>
+                <button class="filter-chip" data-filter="imax" title="IMAX">
+                    <span class="filter-text-icon">IMAX</span>
+                    <span>IMAX</span>
+                </button>
+                <button class="filter-chip" data-filter="dolby" title="Dolby Atmos">
+                    <span class="filter-text-icon">DOLBY</span>
+                    <span>Dolby Atmos</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Step 1: Location Selection -->
+        <section class="booking-step location-step" id="step-location">
+            <div class="step-header">
+                <span class="step-number">1</span>
+                <div class="step-info">
+                    <h2>Select Location</h2>
+                    <p>Choose your state and city to find nearby cinemas</p>
+                </div>
+            </div>
+            <div class="step-content">
+                <div class="location-grid">
+                    <div class="form-field">
+                        <label for="state-select">State</label>
+                        <div class="custom-select" id="state-select-wrapper">
+                            <div class="select-selected" id="state-selected">
+                                <span>Choose a state...</span>
+                                <svg class="select-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M6 9l6 6 6-6"/>
+                                </svg>
+                            </div>
+                            <div class="select-options" id="state-options">
+                                <div class="select-option" data-value="">Choose a state...</div>
+                                <div class="select-option" data-value="nsw">New South Wales</div>
+                                <div class="select-option" data-value="victoria">Victoria</div>
+                                <div class="select-option" data-value="queensland">Queensland</div>
+                                <div class="select-option" data-value="wa">Western Australia</div>
+                                <div class="select-option" data-value="sa">South Australia</div>
+                                <div class="select-option" data-value="tasmania">Tasmania</div>
+                                <div class="select-option" data-value="act">Australian Capital Territory</div>
+                                <div class="select-option" data-value="nt">Northern Territory</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-field">
+                        <label for="city-select">City</label>
+                        <div class="custom-select disabled" id="city-select-wrapper">
+                            <div class="select-selected" id="city-selected">
+                                <span>Choose a city...</span>
+                                <svg class="select-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M6 9l6 6 6-6"/>
+                                </svg>
+                            </div>
+                            <div class="select-options" id="city-options">
+                                <div class="select-option" data-value="">Choose a city...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Cinema List -->
+                <div class="cinema-list" id="cinema-list" style="display: none;">
+                    <h3>Available Cinemas</h3>
+                    <div class="cinema-search-wrapper">
+                        <svg class="cinema-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                        <input type="text" id="cinema-search" class="cinema-search-input" placeholder="Search cinemas...">
+                    </div>
+                    <div class="cinema-cards" id="cinema-cards">
+                        <!-- Cinemas will be populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 2: Movie & Showtime (shown after cinema selection) -->
+        <section class="booking-step movie-step" id="step-movie" style="display: none;">
+            <div class="step-header">
+                <span class="step-number">2</span>
+                <div class="step-info">
+                    <h2>Select Movie & Time</h2>
+                    <p id="selected-cinema-name">Choose your preferred showtime</p>
+                </div>
+            </div>
+            <div class="step-content">
+                <!-- Date Selector -->
+                <div class="date-selector" id="date-selector">
+                    <!-- Dates will be populated by JS -->
+                </div>
+
+                <!-- Movies at this cinema -->
+                <div class="movies-grid" id="movies-grid">
+                    <!-- Movies will be populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 3: Booking Summary (shown after showtime selection) -->
+        <section class="booking-step summary-step" id="step-summary" style="display: none;">
+            <div class="step-header">
+                <span class="step-number">3</span>
+                <div class="step-info">
+                    <h2>Confirm Booking</h2>
+                    <p>Review your selection and complete booking</p>
+                </div>
+            </div>
+            <div class="step-content">
+                <div class="booking-summary">
+                    <div class="summary-movie">
+                        <img id="summary-poster" src="" alt="Movie poster">
+                        <div class="summary-details">
+                            <h3 id="summary-title">Movie Title</h3>
+                            <p id="summary-cinema">Cinema Name</p>
+                            <p id="summary-datetime">Date & Time</p>
+                        </div>
+                    </div>
+                    <div class="ticket-selector">
+                        <h4>Select Tickets</h4>
+                        <div class="ticket-types">
+                            <div class="ticket-type">
+                                <div class="ticket-type-info">
+                                    <span class="ticket-type-name">Adult</span>
+                                    <span class="ticket-type-price">$24.00</span>
+                                </div>
+                                <div class="ticket-type-controls">
+                                    <button class="ticket-adj-btn" onclick="BookingManager.adjustTicketType('adult', -1)">−</button>
+                                    <span class="ticket-type-count" id="count-adult">0</span>
+                                    <button class="ticket-adj-btn" onclick="BookingManager.adjustTicketType('adult', 1)">+</button>
+                                </div>
+                            </div>
+                            <div class="ticket-type">
+                                <div class="ticket-type-info">
+                                    <span class="ticket-type-name">Concession</span>
+                                    <span class="ticket-type-desc">Students, Seniors, Health Care Card</span>
+                                    <span class="ticket-type-price">$19.00</span>
+                                </div>
+                                <div class="ticket-type-controls">
+                                    <button class="ticket-adj-btn" onclick="BookingManager.adjustTicketType('concession', -1)">−</button>
+                                    <span class="ticket-type-count" id="count-concession">0</span>
+                                    <button class="ticket-adj-btn" onclick="BookingManager.adjustTicketType('concession', 1)">+</button>
+                                </div>
+                            </div>
+                            <div class="ticket-type">
+                                <div class="ticket-type-info">
+                                    <span class="ticket-type-name">Child</span>
+                                    <span class="ticket-type-desc">3-15 years</span>
+                                    <span class="ticket-type-price">$17.00</span>
+                                </div>
+                                <div class="ticket-type-controls">
+                                    <button class="ticket-adj-btn" onclick="BookingManager.adjustTicketType('child', -1)">−</button>
+                                    <span class="ticket-type-count" id="count-child">0</span>
+                                    <button class="ticket-adj-btn" onclick="BookingManager.adjustTicketType('child', 1)">+</button>
+                                </div>
+                            </div>
+                            <div class="ticket-type">
+                                <div class="ticket-type-info">
+                                    <span class="ticket-type-name">Family</span>
+                                    <span class="ticket-type-desc">2 Adults + 2 Children</span>
+                                    <span class="ticket-type-price">$72.00</span>
+                                </div>
+                                <div class="ticket-type-controls">
+                                    <button class="ticket-adj-btn" onclick="BookingManager.adjustTicketType('family', -1)">−</button>
+                                    <span class="ticket-type-count" id="count-family">0</span>
+                                    <button class="ticket-adj-btn" onclick="BookingManager.adjustTicketType('family', 1)">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ticket-summary" id="ticket-summary" style="display: none;">
+                            <div class="ticket-breakdown" id="ticket-breakdown"></div>
+                        </div>
+                    </div>
+                    <div class="summary-total">
+                        <span>Total</span>
+                        <span class="total-price">$<span id="total-price">0.00</span></span>
+                    </div>
+                    <button class="btn-confirm" onclick="BookingManager.confirmBooking()">
+                        Confirm Booking
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Empty State (shown when no movie selected from other pages) -->
+        <section class="empty-state" id="empty-state">
+            <div class="empty-content">
+                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                    <rect x="2" y="4" width="20" height="16" rx="2"/>
+                    <path d="M2 8h20"/>
+                    <path d="M9 4v4"/>
+                    <path d="M15 4v4"/>
+                </svg>
+                <h2>Ready to Book?</h2>
+                <p>Select a location above to see available cinemas and showtimes, or browse movies first.</p>
+                <a href="watchwhat-new.html" class="btn-browse">
+                    Browse Movies
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Booking Confirmation Modal -->
+    <div class="booking-modal-overlay" id="booking-modal-overlay">
+        <div class="booking-modal">
+            <div class="modal-header">
+                <div class="modal-success-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M9 12l2 2 4-4"/>
+                    </svg>
+                </div>
+                <h2>Booking Confirmed!</h2>
+            </div>
+            <div class="modal-body">
+                <div class="modal-booking-details">
+                    <div class="modal-detail-row">
+                        <span class="modal-label">Movie</span>
+                        <span class="modal-value" id="modal-movie"></span>
+                    </div>
+                    <div class="modal-detail-row">
+                        <span class="modal-label">Cinema</span>
+                        <span class="modal-value" id="modal-cinema"></span>
+                    </div>
+                    <div class="modal-detail-row">
+                        <span class="modal-label">Date</span>
+                        <span class="modal-value" id="modal-date"></span>
+                    </div>
+                    <div class="modal-detail-row">
+                        <span class="modal-label">Time</span>
+                        <span class="modal-value" id="modal-time"></span>
+                    </div>
+                    <div class="modal-detail-row" id="modal-session-row" style="display: none;">
+                        <span class="modal-label">Session</span>
+                        <span class="modal-value" id="modal-session"></span>
+                    </div>
+                    <div class="modal-detail-row">
+                        <span class="modal-label">Tickets</span>
+                        <span class="modal-value" id="modal-tickets"></span>
+                    </div>
+                    <div class="modal-detail-row modal-total-row">
+                        <span class="modal-label">Total</span>
+                        <span class="modal-value modal-total" id="modal-total"></span>
+                    </div>
+                </div>
+                <div class="modal-booking-id">
+                    <span>Booking ID:</span>
+                    <span id="modal-booking-id"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn-primary" onclick="BookingManager.closeModalAndRedirect()">
+                    View My Bookings
+                </button>
+                <button class="modal-btn-secondary" onclick="BookingManager.closeModal()">
+                    Book Another
+                </button>
+            </div>
         </div>
     </div>
 
-    <main>
-        <div class="content">
-            <div class="movie-poster card card-cinema">
-                <img id="movie-poster-img" src="media/Kong Fu panda.webp" alt="Kung Fu Panda 4">
-                <p class="movie-title" id="movie-title">Kung Fu Panda 4</p>
-            </div>
-            <div class="movie-schedule">
-                <div class="date-selector">
-                    <button class="btn btn-secondary" aria-label="Select today's date" aria-pressed="true">Today 05/09 Thu</button>
-                    <button class="btn btn-dark" aria-label="Select tomorrow's date">Tomorrow 05/10 Fri</button>
-                    <button class="btn btn-dark" aria-label="Select date for 05/11 Sat">05/11 Sat</button>
-                    <button class="btn btn-dark next-date" aria-label="Go to next date">></button>
-                </div>
-                <div class="cinema-schedule">
-                    <h3>Cineplex Cinema</h3>
-                    <p>Location: 167 Grey St, South Brisbane QLD 4101</p>
-                    <ul aria-label="Show times and prices">
-                        <li>11:00 AM - $15</li>
-                        <li>12:30 PM - $15</li>
-                        <li>2:30 PM - $15</li>
-                    </ul>
-                    <button type="button" class="btn btn-primary booking-btn" aria-label="Book tickets for Cineplex Cinema">Book Tickets</button>
-                </div>
-                <div class="cinema-schedule">
-                    <h3>Event Cinemas Indooroopilly</h3>
-                    <p>Location: Indooroopilly Shopping Centre, 2/322 Moggill Rd, QLD 4068</p>
-                    <ul aria-label="Show times and prices">
-                        <li>10:00 AM - $16</li>
-                        <li>12:30 PM - $16</li>
-                        <li>3:30 PM - $16</li>
-                    </ul>
-                    <button type="button" class="btn btn-primary booking-btn" aria-label="Book tickets for Event Cinemas Indooroopilly">Book Tickets</button>
-                </div>
-                <div class="cinema-schedule">
-                    <h3>Palace Barracks Cinema</h3>
-                    <p>Location: 61 Petrie Terrace, Brisbane QLD 4000</p>
-                    <ul aria-label="Show times and prices">
-                        <li>9:00 AM - $14</li>
-                        <li>11:45 AM - $14</li>
-                        <li>2:00 PM - $14</li>
-                    </ul>
-                    <button type="button" class="btn btn-primary booking-btn" aria-label="Book tickets for Palace Barracks Cinema">Book Tickets</button>
-                </div>
-                <div class="cinema-schedule">
-                    <h3>Blue Room Cinebar</h3>
-                    <p>Location: 151 Baroona Rd, Paddington QLD 4064</p>
-                    <ul aria-label="Show times and prices">
-                        <li>10:00 AM - $17</li>
-                        <li>1:00 PM - $17</li>
-                        <li>4:00 PM - $17</li>
-                    </ul>
-                    <button type="button" class="btn btn-primary" aria-label="Book tickets for Blue Room Cinebar">Book Tickets</button>
-                </div>
-            </div>
-        </div>
-    </main>
+    <footer>
+        <p>© 2024 MOSS - Movies One-stop Station</p>
+    </footer>
+
+    <script src="js/accessibility.js"></script>
+    <script src="js/favorites.js"></script>
+    <script src="js/script.js"></script>
     <script src="js/bookings.js"></script>
     <script src="js/book.js"></script>
 </body>

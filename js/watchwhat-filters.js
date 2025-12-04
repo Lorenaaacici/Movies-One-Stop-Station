@@ -9,7 +9,9 @@ const WatchWhatFilters = {
     API: {
         BASE_URL: 'https://api.themoviedb.org/3',
         API_KEY: 'a07e22bc18f5cb106bfe4cc1f83ad8ed',
-        IMAGE_BASE_URL: 'https://image.tmdb.org/t/p/w500'
+        IMAGE_BASE_URL: 'https://image.tmdb.org/t/p/w500',
+        // Fallback poster as data URI (no external file needed)
+        DEFAULT_POSTER: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='450' viewBox='0 0 300 450'%3E%3Crect fill='%231a1a1a' width='300' height='450'/%3E%3Crect fill='%232a2a2a' x='20' y='20' width='260' height='410' rx='8'/%3E%3Ctext x='150' y='200' text-anchor='middle' fill='%23666' font-family='Arial' font-size='48'%3E%F0%9F%8E%AC%3C/text%3E%3Ctext x='150' y='250' text-anchor='middle' fill='%23555' font-family='Arial' font-size='14'%3ENo Poster%3C/text%3E%3Ctext x='150' y='275' text-anchor='middle' fill='%23444' font-family='Arial' font-size='12'%3EAvailable%3C/text%3E%3C/svg%3E"
     },
 
     state: {
@@ -21,14 +23,66 @@ const WatchWhatFilters = {
             rating: '',
             sort: 'popularity.desc'
         },
-        movies: []
+        movies: [],
+        searchQuery: ''
     },
 
     // Initialize the page
     init() {
         console.log('🎬 Initializing Watch What Filters...');
         this.setupEventListeners();
-        this.loadDefaultMovies();
+        this.checkURLParams();
+    },
+
+    // Check for URL parameters (search query)
+    checkURLParams() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const searchQuery = urlParams.get('search');
+
+        if (searchQuery) {
+            console.log(`🔍 Search query from URL: ${searchQuery}`);
+            this.state.searchQuery = searchQuery;
+            this.performSearch(searchQuery);
+        } else {
+            this.loadDefaultMovies();
+        }
+    },
+
+    // Perform search with query
+    async performSearch(query) {
+        console.log(`🔍 Searching for: ${query}`);
+        document.getElementById('results-count').textContent = `Searching for "${query}"...`;
+
+        this.showLoading();
+
+        try {
+            const response = await fetch(
+                `${this.API.BASE_URL}/search/movie?api_key=${this.API.API_KEY}&language=en-US&query=${encodeURIComponent(query)}&page=${this.state.currentPage}&include_adult=false`
+            );
+
+            if (response.ok) {
+                const data = await response.json();
+                this.state.totalPages = data.total_pages;
+                this.state.movies = data.results;
+
+                if (data.results.length > 0) {
+                    document.getElementById('results-count').textContent =
+                        `Found ${data.total_results} results for "${query}"`;
+                } else {
+                    document.getElementById('results-count').textContent =
+                        `No results found for "${query}"`;
+                }
+
+                this.displayMovies(this.state.currentPage === 1 ? false : true);
+                this.hideLoading();
+            } else {
+                throw new Error('Search failed');
+            }
+        } catch (error) {
+            console.error('Search error:', error);
+            document.getElementById('results-count').textContent = 'Error searching movies';
+            this.hideLoading();
+        }
     },
 
     // Setup all event listeners
@@ -80,6 +134,9 @@ const WatchWhatFilters = {
 
         // Update filter state
         this.state.currentFilters[filterType] = value;
+
+        // Clear search query when filters are used
+        this.state.searchQuery = '';
 
         // Reset to page 1 and fetch movies
         this.state.currentPage = 1;
@@ -193,7 +250,7 @@ const WatchWhatFilters = {
 
         const posterUrl = movie.poster_path
             ? `${this.API.IMAGE_BASE_URL}${movie.poster_path}`
-            : 'media/default-poster.jpg';
+            : this.API.DEFAULT_POSTER;
 
         const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : '';
         const rating = movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A';
@@ -216,10 +273,17 @@ const WatchWhatFilters = {
 
         const genres = movie.genre_ids ? movie.genre_ids.slice(0, 2).map(id => genreMap[id]).filter(Boolean) : [];
 
+        // Determine if we have a valid poster
+        const hasPoster = movie.poster_path;
+
         card.innerHTML = `
             <div class="movie-poster-container">
-                <img src="${posterUrl}" alt="Poster of ${movie.title}" loading="lazy"
-                     onerror="this.src='media/default-poster.jpg'">
+                ${hasPoster
+                    ? `<img src="${posterUrl}" alt="Poster of ${movie.title}" loading="lazy"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                       <div class="poster-skeleton" style="display:none;"></div>`
+                    : `<div class="poster-skeleton"></div>`
+                }
                 <div class="movie-rating-overlay">
                     <span class="imdb-like-rating">★ ${rating}</span>
                 </div>
@@ -308,7 +372,30 @@ const WatchWhatFilters = {
     async loadMore() {
         this.state.currentPage++;
         this.showLoading();
-        await this.fetchMovies(true);
+
+        // If there's a search query, search for more results instead of filtering
+        if (this.state.searchQuery) {
+            await this.searchMore();
+        } else {
+            await this.fetchMovies(true);
+        }
+    },
+
+    // Load more search results
+    async searchMore() {
+        try {
+            const response = await fetch(
+                `${this.API.BASE_URL}/search/movie?api_key=${this.API.API_KEY}&language=en-US&query=${encodeURIComponent(this.state.searchQuery)}&page=${this.state.currentPage}&include_adult=false`
+            );
+
+            if (response.ok) {
+                const data = await response.json();
+                this.state.movies = [...this.state.movies, ...data.results];
+                this.displayMovies(true);
+            }
+        } catch (error) {
+            console.error('Load more search results error:', error);
+        }
     },
 
     // Update results count

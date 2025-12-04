@@ -1,4 +1,4 @@
- 有点/* MOSS Movie Cards - Complete Shared Component Styles */
+ /* MOSS Movie Cards - Complete Shared Component Styles */
 /* This file contains ALL movie card styles that can be reused across pages */
 
 /* Movie Categories */
@@ -48,6 +48,45 @@
     transition: transform 0.3s ease;
     display: block;
     background: rgba(26, 26, 26, 0.8);
+}
+
+/* Skeleton placeholder for missing movie posters */
+.movie .poster-skeleton,
+.movie-poster-container .poster-skeleton {
+    width: 100%;
+    aspect-ratio: 2/3;
+    background: linear-gradient(
+        110deg,
+        rgba(50, 50, 50, 1) 8%,
+        rgba(70, 70, 70, 1) 18%,
+        rgba(50, 50, 50, 1) 33%
+    );
+    background-size: 200% 100%;
+    animation: poster-skeleton-shimmer 1.5s ease-in-out infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.movie .poster-skeleton::after,
+.movie-poster-container .poster-skeleton::after {
+    content: '';
+    width: 48px;
+    height: 48px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='1.5'%3E%3Crect x='2' y='2' width='20' height='20' rx='2'/%3E%3Ccircle cx='8.5' cy='8.5' r='1.5'/%3E%3Cpath d='M21 15l-5-5L5 21'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.3;
+}
+
+@keyframes poster-skeleton-shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
 }
 
 /* Movie Rating Overlay */
@@ -313,15 +352,16 @@
 /* Responsive Grid Adjustments */
 @media (max-width: 640px) {
     .movie-list {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 16px;
-        padding: 16px 0;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        padding: 12px 0;
     }
 }
 
 @media (min-width: 641px) and (max-width: 1024px) {
     .movie-list {
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 16px;
         max-width: 900px;
     }
 }
@@ -342,16 +382,87 @@
 
 @media (max-width: 768px) {
     .movie-list {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
     }
 
-    .movie .movie-title, .movie p:last-child {
-        font-size: 18px;
+    .movie {
+        border-radius: 10px;
+    }
+
+    .movie-poster-container {
+        border-radius: 10px 10px 0 0;
+    }
+
+    .movie .movie-title {
+        font-size: 14px;
+        margin-bottom: 6px;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+    }
+
+    .movie-info {
+        padding: 10px;
+    }
+
+    .movie-details {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+
+    .release-year {
+        font-size: 11px;
+        padding: 2px 5px;
+    }
+
+    .genre-tags {
+        display: none;
+    }
+
+    .movie-rating-overlay {
+        top: 6px;
+        left: 6px;
+        padding: 3px 6px;
+    }
+
+    .imdb-like-rating {
+        font-size: 11px;
+    }
+
+    .movie-badge {
+        top: 6px;
+        right: 6px;
+        padding: 3px 6px;
+        font-size: 9px;
+    }
+
+    /* Hide overlay on mobile - use tap instead */
+    .movie-overlay {
+        display: none;
     }
 }
 
 @media (max-width: 480px) {
     .movie-list {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .movie {
+        border-radius: 8px;
+    }
+
+    .movie .movie-title {
+        font-size: 13px;
+        line-height: 1.3;
+    }
+
+    .movie-info {
+        padding: 8px;
+    }
+
+    .release-year {
+        font-size: 10px;
     }
 }

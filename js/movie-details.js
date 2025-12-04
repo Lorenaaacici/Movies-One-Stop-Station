@@ -17,6 +17,82 @@ const MovieDetails = {
         currentDiscoveryFilter: 'similar'
     },
 
+    modalResolve: null,
+
+    // Setup custom confirm modal
+    setupModal() {
+        const modal = document.getElementById('confirm-modal');
+        const cancelBtn = document.getElementById('confirm-cancel');
+        const confirmBtn = document.getElementById('confirm-ok');
+
+        if (!modal) return;
+
+        cancelBtn.addEventListener('click', () => {
+            this.hideModal();
+            if (this.modalResolve) {
+                this.modalResolve(false);
+                this.modalResolve = null;
+            }
+        });
+
+        confirmBtn.addEventListener('click', () => {
+            this.hideModal();
+            if (this.modalResolve) {
+                this.modalResolve(true);
+                this.modalResolve = null;
+            }
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                this.hideModal();
+                if (this.modalResolve) {
+                    this.modalResolve(false);
+                    this.modalResolve = null;
+                }
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                this.hideModal();
+                if (this.modalResolve) {
+                    this.modalResolve(false);
+                    this.modalResolve = null;
+                }
+            }
+        });
+    },
+
+    showConfirm(title, message, isDanger = false) {
+        return new Promise((resolve) => {
+            const modal = document.getElementById('confirm-modal');
+            const titleEl = document.getElementById('confirm-title');
+            const messageEl = document.getElementById('confirm-message');
+            const confirmBtn = document.getElementById('confirm-ok');
+            const iconEl = document.getElementById('modal-icon');
+
+            titleEl.textContent = title;
+            messageEl.textContent = message;
+
+            if (isDanger) {
+                confirmBtn.classList.add('danger');
+                iconEl.classList.add('danger');
+            } else {
+                confirmBtn.classList.remove('danger');
+                iconEl.classList.remove('danger');
+            }
+
+            this.modalResolve = resolve;
+            modal.classList.add('active');
+        });
+    },
+
+    hideModal() {
+        const modal = document.getElementById('confirm-modal');
+        modal.classList.remove('active');
+    },
+
     // Get movie ID from URL parameters
     getMovieIdFromURL() {
         const urlParams = new URLSearchParams(window.location.search);
@@ -452,23 +528,29 @@ const MovieDetails = {
             return;
         }
 
-        // SVG placeholder for missing movie posters
-        const defaultPoster = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="300" viewBox="0 0 200 300"%3E%3Crect fill="%23404040" width="200" height="300"/%3E%3Ctext x="100" y="150" font-size="16" fill="%23F0E4BF" opacity="0.3" text-anchor="middle"%3ENo Image%3C/text%3E%3C/svg%3E';
+        similarGrid.innerHTML = movies.map(movie => {
+            // Use skeleton placeholder when no poster is available
+            const hasPoster = movie.poster_path;
 
-        similarGrid.innerHTML = movies.map(movie => `
-            <div class="similar-movie-card" onclick="MovieDetails.navigateToMovie(${movie.id})">
-                <img
-                    src="${movie.poster_path ? this.API.IMAGE_BASE_URL + movie.poster_path : defaultPoster}"
-                    alt="${movie.title}"
-                    class="similar-movie-poster"
-                    onerror="this.onerror=null; this.src='${defaultPoster}'"
-                >
-                <div class="similar-movie-info">
-                    <div class="similar-movie-title">${this.truncateText(movie.title, 30)}</div>
-                    <div class="similar-movie-rating">★ ${movie.vote_average.toFixed(1)}</div>
+            return `
+                <div class="similar-movie-card" onclick="MovieDetails.navigateToMovie(${movie.id})">
+                    ${hasPoster
+                        ? `<img
+                            src="${this.API.IMAGE_BASE_URL + movie.poster_path}"
+                            alt="${movie.title}"
+                            class="similar-movie-poster"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                            loading="lazy"
+                        ><div class="poster-skeleton" style="display:none;"></div>`
+                        : `<div class="poster-skeleton"></div>`
+                    }
+                    <div class="similar-movie-info">
+                        <div class="similar-movie-title">${this.truncateText(movie.title, 30)}</div>
+                        <div class="similar-movie-rating">★ ${movie.vote_average.toFixed(1)}</div>
+                    </div>
                 </div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
     },
 
     // Switch discovery filter
@@ -609,15 +691,45 @@ const MovieDetails = {
     },
 
     // Delete note and refresh display
-    deleteNote(movieId, noteId) {
-        if (confirm('Delete this note?')) {
+    async deleteNote(movieId, noteId) {
+        const confirmed = await this.showConfirm(
+            'Delete Note',
+            'Are you sure you want to delete this note? This action cannot be undone.',
+            true
+        );
+        if (confirmed) {
             this.Notes.delete(movieId, noteId);
             this.displayPersonalNotes(movieId);
         }
     },
 
+    // Setup cast scroll fade effect
+    setupCastScrollFade() {
+        const castGrid = document.getElementById('cast-grid');
+        const container = castGrid?.closest('.cast-scroll-container');
+
+        if (!castGrid || !container) return;
+
+        const updateFade = () => {
+            const isAtEnd = castGrid.scrollLeft + castGrid.clientWidth >= castGrid.scrollWidth - 10;
+            container.classList.toggle('scrolled-end', isAtEnd);
+        };
+
+        // Initial check
+        updateFade();
+
+        // Update on scroll
+        castGrid.addEventListener('scroll', updateFade, { passive: true });
+
+        // Update on resize
+        window.addEventListener('resize', updateFade, { passive: true });
+    },
+
     // Setup event listeners
     setupEventListeners() {
+        // Cast scroll fade effect
+        this.setupCastScrollFade();
+
         // Discovery filter buttons
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
@@ -676,6 +788,9 @@ const MovieDetails = {
 
     // Initialize page
     async init() {
+        // Setup modal first
+        this.setupModal();
+
         const movieId = this.getMovieIdFromURL();
 
         if (!movieId) {
